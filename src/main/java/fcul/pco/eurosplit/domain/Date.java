@@ -1,6 +1,7 @@
 package fcul.pco.eurosplit.domain;
 /*
  * @author Fábio Neves
+ * This class defines Date instances.
  */
 import java.time.LocalDateTime;
 
@@ -21,10 +22,19 @@ public class Date {
 		this.minute = minute;
 	}
 	
+	/*
+	 * Comprises the instance attributes separated by hashkey with format y#m#d#h#m.
+	 * @returns String.
+	 */
 	public String toString() {
 		return (this.year + "#" + this.month + "#" + this.day + "#" + this.hour + "#" + this.minute);
 	}
 	
+	/*
+	 * Takes Date.toString() formated date and returns an instance with the same values.
+	 * @param String.
+	 * @returns Date. 
+	 */
 	public static Date fromString(String date){
 		String[] split_date = date.split("#");
 		int year = Integer.parseInt(split_date[0]);
@@ -36,8 +46,13 @@ public class Date {
 		return new Date(year, month, day, hour, minute);
 	}
 	
+	/*
+	 * Returns hashkey separated date with format y#m#d#h#m.
+	 * @returns String.
+	 */
 	public static String dateNow() {
 		StringBuilder date =  new StringBuilder();
+		//LocalDateTime is a tool from the api that returns values from the system clock.
 		date.append(LocalDateTime.now().getYear());
 		date.append("#");
 		date.append(LocalDateTime.now().getMonthValue());
