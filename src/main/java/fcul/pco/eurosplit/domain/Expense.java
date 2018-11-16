@@ -51,14 +51,15 @@ public class Expense {
 	}
 	
 	/*
-	 * @returns Expense.item
+	 * Returns Item of the expense instance.
+	 * @returns String
 	 */
 	public String getItem() {
 		return item;
 	}
 	
 	/*
-	 * Substitutes the value.
+	 * Sets value. If already set, overwrites.
 	 * @param value
 	 */
 	public void setValue(int value) throws Exception {
@@ -71,13 +72,14 @@ public class Expense {
 	}
 	
 	/*
-	 * @returns Expense.value
+	 * Returns the value of the expense instance.
+	 * @returns int
 	 */
 	public int getValue() {
 		return value;
 	}
 	/*
-	 * Substitutes User.
+	 * Sets User instance. If already present, overwrites previous value.
 	 * @param paidBy
 	 * @requires User instance.
 	 */
@@ -86,7 +88,8 @@ public class Expense {
 	}
 	
 	/*
-	 * @returns Expense.paidBy
+	 * Returns the paying User of expense instance.
+	 * @returns User
 	 */
 	public User getUser() {
 		return paidBy;
@@ -95,9 +98,10 @@ public class Expense {
 	public void addPaidFor(User U) {
 		paidFor.add(U);
 	}
+	
 	/*
-	 * Transforms Expense attributes into its hashkey string.
-	 * @returns Expense.toString
+	 * Transforms Expense attributes into its hashkey string with format item#value#paidBy.
+	 * @returns String
 	 */
 	public String toString() {
 		StringBuilder expense = new StringBuilder();
@@ -125,7 +129,6 @@ public class Expense {
 	 * @param String
 	 * @requires input formated into "String#Integer#User"
 	 * @returns new Expense(String, String, User)
-	 * 
 	 */
 	public static Expense fromString(String expense) throws NumberFormatException, Exception {
 		String[] split_expense = expense.split("#"); 
