@@ -1,89 +1,86 @@
 package fcul.pco.eurosplit.domain;
 
 
-/**
- * 
- * A class for representing the User with an e-mail and a name.
- * 
- * @author ClaudiaBelem
- **/
+/*
+ * The User class represents a user assigned with name and email.
+ * @author Cláudia Belém & Fábio Neves	
+ */
+
 public class User {
-	private String email;
 	private String name;
 	
+	private String email;
 	
-	/**
-	 *  Constructs a new user using supplied strings for email and user
-	 * @param this.email for e-mail
-	 * @param this.name for name
-	 *
-	 **/
-	public User (String email, String name) {
-		this.email = email;
+	/*
+	 * Constructor of Instance User.
+	 * @param name
+	 * @param email
+	 */
+	public User(String name, String email) {
 		this.name = name;
-		
+		this.email = email;
 	}
-
 	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 * @returns String.
+	 */
 	
+	/*
+	 *@param name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 	
-	/**
-	 * 
-	 * @param email the email to set
+	/*
+	 * @returns User.name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/*
+	 * @param email
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	
-	/**
-	 * 
-	 * @return the email
-	 **/
+	/*
+	 * @returns User.email
+	 */
 	public String getEmail() {
-		
 		return email;
 	}
-
 	
-
-	/**
-	 *
-	 * @param name the name to set
-	 **/
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * 
-	 * @return the name
+	/*
+	 * Returns hashkey separated user attributes.
+	 * @returns User.toString();
 	 */
-	public String getName() {
-		return name;
+	public String toString() {
+		StringBuilder user = new StringBuilder();
+		user.append(this.name + "#" + this.email);
+		return user.toString();
 	}
-
 	
-	/**
-	 * 
-	 * 
-	 **/
-	public String toString(){
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append(email).append("#").append(name);
-		return sb.toString();
-
+	
+	/*
+	 * Creates an User instance from string
+	 * Splits string on "#".
+	 * @returns new User(name, email)
+	 */
+	public static User fromString(String user) {
+		String[] split_user = user.split("#");
+		return new User(split_user[0], split_user[1]);
 	}
-
 	
-	public static User fromString(String line) {
-		String [] line_split = line.split("#");
-		String userEmail = line_split[0];
-		String userName = line_split[1];
-		return new User (userEmail, userName);
+	/*
+	 * Creates an User instance from two diferent strings.
+	 * @returns new User(name, email)
+	 */
+	public static User fromString(String name, String email) {
+		return new User(name, email);
 	}
-
-	
-	
-	
 }
