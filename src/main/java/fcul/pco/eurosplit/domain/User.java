@@ -22,12 +22,7 @@ public class User {
 	}
 	
 	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 * @returns String.
-	 */
-	
-	/*
+	 * Sets instance name. If already present, overwrites.
 	 *@param name
 	 */
 	public void setName(String name) {
@@ -35,28 +30,32 @@ public class User {
 	}
 	
 	/*
-	 * @returns User.name
+	 * Returns name of User associated instance.
+	 * @returns String
 	 */
 	public String getName() {
 		return name;
 	}
 	
 	/*
-	 * @param email
+	 * Sets instance email. If already present, overwrites.
+	 *@param email
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	
 	/*
-	 * @returns User.email
+	 *
+	 * Returns email of User associated instance.
+	 * @returns String
 	 */
 	public String getEmail() {
 		return email;
 	}
 	
 	/*
-	 * Returns hashkey separated user attributes.
+	 * Returns hashkey separated user attributes in format name#email.
 	 * @returns User.toString();
 	 */
 	public String toString() {
@@ -67,9 +66,8 @@ public class User {
 	
 	
 	/*
-	 * Creates an User instance from string
-	 * Splits string on "#".
-	 * @returns new User(name, email)
+	 * Creates an User instance from string. Splits string on hashkey.
+	 * @returns User
 	 */
 	public static User fromString(String user) {
 		String[] split_user = user.split("#");
@@ -78,7 +76,7 @@ public class User {
 	
 	/*
 	 * Creates an User instance from two diferent strings.
-	 * @returns new User(name, email)
+	 * @returns User
 	 */
 	public static User fromString(String name, String email) {
 		return new User(name, email);
