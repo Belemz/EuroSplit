@@ -3,7 +3,7 @@ package fcul.pco.eurosplit.domain;
 
 /*
  * The User class represents a user assigned with name and email.
- * @author Cl·udia BelÈm & F·bio Neves	
+ * @author Cl√°udia Bel√©m & F√°bio Neves	
  */
 
 public class User {
@@ -75,7 +75,7 @@ public class User {
 	}
 	
 	/*
-	 * Creates an User instance from two diferent strings.
+	 * Creates an User instance from two different strings.
 	 * @returns User
 	 */
 	public static User fromString(String name, String email) {
