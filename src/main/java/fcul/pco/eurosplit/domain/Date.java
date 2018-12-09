@@ -3,9 +3,8 @@ package fcul.pco.eurosplit.domain;
  * @author F�bio Neves
  * This class defines Date instances.
  */
-import java.time.LocalDateTime;
 
-import fcul.pco.eurosplit.domain.Date;
+import java.time.LocalDateTime;
 
 public class Date {
 	private int year;
@@ -27,7 +26,7 @@ public class Date {
 	 * @returns String.
 	 */
 	public String toString() {
-		return (this.year + "#" + this.month + "#" + this.day + "#" + this.hour + "#" + this.minute);
+        return (this.year + "-" + this.month + "-" + this.day + "-" + this.hour + "-" + this.minute); //todo rever isto... não convém separar sempre com o #
 	}
 	
 	/*
@@ -36,34 +35,26 @@ public class Date {
 	 * @returns Date. 
 	 */
 	public static Date fromString(String date){
-		String[] split_date = date.split("#");
+        String[] split_date = date.split("-");
+        System.out.println(split_date[0]);
 		int year = Integer.parseInt(split_date[0]);
 		int month = Integer.parseInt(split_date[1]);
 		int day = Integer.parseInt(split_date[2]);
 		int hour = Integer.parseInt(split_date[3]);
 		int minute = Integer.parseInt(split_date[4]);
-		
+
 		return new Date(year, month, day, hour, minute);
 	}
-	
-	/*
-	 * Returns hashkey separated date with format y#m#d#h#m.
-	 * @returns String.
+
+    /*todo contract
 	 */
-	public static String dateNow() {
-		StringBuilder date =  new StringBuilder();
-		//LocalDateTime is a tool from the API that returns values from the system clock.
-		date.append(LocalDateTime.now().getYear());
-		date.append("#");
-		date.append(LocalDateTime.now().getMonthValue());
-		date.append("#");
-		date.append(LocalDateTime.now().getDayOfMonth());
-		date.append("#");
-		date.append(LocalDateTime.now().getHour());
-		date.append("#");
-		date.append(LocalDateTime.now().getMinute());
-		
-		return date.toString();
+    public static Date dateNow() {
+
+        return new Date(LocalDateTime.now().getYear(),
+                LocalDateTime.now().getMonthValue(),
+                LocalDateTime.now().getDayOfMonth(),
+                LocalDateTime.now().getHour(),
+                LocalDateTime.now().getMinute());
 	}
 	
 }
