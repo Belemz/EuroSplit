@@ -144,7 +144,7 @@ public class Expense {
             //todo remover os caracteres após o último e-mail
         }
 
-        return expense.toString();
+        return expense.toString().substring(0, expense.length() - 1);
     }
 
     /*

@@ -80,7 +80,7 @@ public class Start {
          * Loads "users.dat" into it.
          * Prints out catalog.
          */
-        UserCatalog catalog2 = new UserCatalog();
+        // UserCatalog catalog2 = new UserCatalog();
         // catalog2.load();
 
         // System.out.println(catalog2.toString());

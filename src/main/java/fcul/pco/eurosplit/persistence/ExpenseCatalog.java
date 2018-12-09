@@ -7,19 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import static fcul.pco.eurosplit.main.ApplicationConfiguration.EXPENSES_CATALOG_FILENAME;
+import static fcul.pco.eurosplit.main.ApplicationConfiguration.ROOT_DIRECTORY;
+
 public class ExpenseCatalog {
-
-
-    private static String directory = "./tests/";
-    private static String fileName = "expenses.dat";
-
 
     public static void save(Map<Integer, Expense> expenses) throws IOException {
 
-        try (BufferedWriter fw = new BufferedWriter(new FileWriter(directory + fileName))) {
+        try (BufferedWriter file_write = new BufferedWriter(new FileWriter(ROOT_DIRECTORY + EXPENSES_CATALOG_FILENAME))) {
 
             for (Expense expense : expenses.values()) {
-                fw.write(expense.toString() + "\n");
+                file_write.write(expense.toString() + "\n");
 
             }
         }
@@ -30,7 +28,7 @@ public class ExpenseCatalog {
 
         HashMap<Integer, Expense> map_expenses = new HashMap<Integer, Expense>();
 
-        try (Scanner inputFromFile = new Scanner(new BufferedReader(new FileReader(directory + fileName)))) {
+        try (Scanner inputFromFile = new Scanner(new BufferedReader(new FileReader(ROOT_DIRECTORY + EXPENSES_CATALOG_FILENAME)))) {
 
             while (inputFromFile.hasNextLine()) {
                 String line = inputFromFile.nextLine();

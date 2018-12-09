@@ -36,8 +36,8 @@ public class Date {
 	 */
 	public static Date fromString(String date){
         String[] split_date = date.split("-");
-        System.out.println(split_date[0]);
-		int year = Integer.parseInt(split_date[0]);
+
+        int year = Integer.parseInt(split_date[0]);
 		int month = Integer.parseInt(split_date[1]);
 		int day = Integer.parseInt(split_date[2]);
 		int hour = Integer.parseInt(split_date[3]);
