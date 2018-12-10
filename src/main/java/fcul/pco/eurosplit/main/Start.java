@@ -8,8 +8,10 @@ import fcul.pco.eurosplit.domain.ExpenseCatalog;
 import fcul.pco.eurosplit.domain.User;
 import fcul.pco.eurosplit.domain.UserCatalog;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Start {
     private static UserCatalog userCatalog;
@@ -39,7 +41,38 @@ public class Start {
             System.err.println("The expense catalog file was not found.");
         }
     }
-
+    
+    /*
+     * Deletes the files saved as Catalogs from UserCatalog class.
+     */
+    private static void deleteCatalogs() {
+        File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
+                + "/"
+                + ApplicationConfiguration.EXPENSES_CATALOG_FILENAME);
+        f.delete();
+        f = new File(ApplicationConfiguration.ROOT_DIRECTORY
+                + "/"
+                + ApplicationConfiguration.USER_CATALOG_FILENAME);
+        f.delete();
+        f = new File(ApplicationConfiguration.ROOT_DIRECTORY
+                + "/"
+                + ApplicationConfiguration.SPLIT_CATALOG_FILENAME);
+        f.delete();
+    }
+    
+    private static void run() {
+    	deleteCatalogs();
+    	Scanner input = new Scanner(System.in);
+    	initialize();
+    	Interp interp = new Interp(input);
+    	String command = "";
+    	do {
+    		command = interp.nextToken();
+    		interp.execute(command, input);
+    	} while (!command.equals("quit"));
+    	
+    	
+    }
     public static void main(String[] args) {
         initialize();
 

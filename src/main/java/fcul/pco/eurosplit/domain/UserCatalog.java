@@ -7,7 +7,11 @@ package fcul.pco.eurosplit.domain;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserCatalog {
@@ -82,4 +86,30 @@ public class UserCatalog {
 	public void load() throws FileNotFoundException {
 		this.users = fcul.pco.eurosplit.persistence.UserCatalog.load();
 	}
+	
+	/*
+	 * !!!A variável que é alimentada ao método Table.tableToString 
+	 * foi alterada para ArrayList<List<String>> para ser 
+	 * compatível.!!!
+	 * Returns the all the values within map sorted.
+	 * @return ArrayList<User>
+	 */
+	public String getAllUsers() {
+		ArrayList<User> l = new ArrayList<User>();
+		
+		l.addAll(this.users.values());
+		Collections.sort(l);
+		
+		ArrayList<List<String>> tab= new ArrayList<List<String>>();
+		for(User u : l) {
+			ArrayList<String> tabentry= new ArrayList<String>();
+			tabentry.add(u.getName());
+			tabentry.add(u.getEmail());
+			
+			tab.add(tabentry);
+		};
+		
+		return Table.tableToString(tab);
+	}
+	
 }
