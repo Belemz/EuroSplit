@@ -3,6 +3,7 @@ package fcul.pco.eurosplit.domain;
 import fcul.pco.eurosplit.main.Start;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /*
@@ -21,7 +22,7 @@ public class Expense {
 
     private User paidBy;
 
-    private ArrayList<User> paidFor;
+    private List<User> paidFor; //todo pode ser com a interface em vez da classe?
 
     private Date when;
 
@@ -78,7 +79,7 @@ public class Expense {
      */
     public void setItem(String item) {
         this.item = item;
-    }
+    } //todo isto é necessário?
 
 
     /*
@@ -118,7 +119,7 @@ public class Expense {
      */
     public void setUser(String name, String email) {
         this.paidBy = new User(name, email);
-    }
+    } // todo isto é necessário?
 
     public void addPaidFor(User user) {
         this.paidFor.add(user);
@@ -164,7 +165,6 @@ public class Expense {
                 Integer.parseInt(split_expense[2]),
                 paidBy_user);
 
-        System.out.println(split_expense[4]);
         expense_object.when = Date.fromString(split_expense[4]);  //todo confirmar se posso fazer isto
 
         for (String email : split_expense[5].split("|")) {

@@ -18,7 +18,6 @@ public class ExpenseCatalog {
 
             for (Expense expense : expenses.values()) {
                 file_write.write(expense.toString() + "\n");
-
             }
         }
     }
@@ -26,7 +25,7 @@ public class ExpenseCatalog {
 
     public static Map<Integer, Expense> load() throws FileNotFoundException {
 
-        HashMap<Integer, Expense> map_expenses = new HashMap<Integer, Expense>();
+        Map<Integer, Expense> map_expenses = new HashMap<Integer, Expense>();
 
         try (Scanner inputFromFile = new Scanner(new BufferedReader(new FileReader(ROOT_DIRECTORY + EXPENSES_CATALOG_FILENAME)))) {
 
