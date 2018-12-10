@@ -6,7 +6,7 @@ package fcul.pco.eurosplit.domain;
  * @author Cláudia Belém & Fábio Neves	
  */
 
-public class User {
+public class User implements Comparable<User>{
 	private String name;
 	
 	private String email;
@@ -80,5 +80,16 @@ public class User {
 	 */
 	public static User fromString(String name, String email) {
 		return new User(name, email);
+	}
+	
+	/*
+	 * Method for the implementation of type comparable.
+	 * Gets char from name o at position 0, and compares with the same position
+	 * on User istance.
+	 */
+	@Override
+	public int compareTo(User o) {
+		// TODO Auto-generated method stub
+		return Character.compare(this.name.charAt(0), o.name.charAt(0));
 	}
 }
