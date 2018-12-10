@@ -70,6 +70,22 @@ public class UserCatalog {
 	}
 	
 	/*
+	 * Searches for a User according to his name.
+	 * Non-sensitive to case.
+	 */
+	public boolean hasUserWithName(String name) {
+		ArrayList<User> l = new ArrayList<User>();
+		l.addAll(this.users.values());
+		
+		for(User u : l) {
+			if(u.getName().toLowerCase().equals(name)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	/*
 	 * Uses UserCatalog.save() from persistence package. 
 	 * Persistence Package Full Path - fcul.pco.eurosplit.persistence.
 	 * Saves to file "users.dat" with Users.toString method.

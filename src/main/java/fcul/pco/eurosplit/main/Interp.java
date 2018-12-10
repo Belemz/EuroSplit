@@ -3,6 +3,7 @@ package fcul.pco.eurosplit.main;
 import fcul.pco.eurosplit.domain.Expense;
 import fcul.pco.eurosplit.domain.Split;
 import fcul.pco.eurosplit.domain.User;
+import fcul.pco.eurosplit.domain.UserCatalog;
 import fcul.pco.eurosplit.domain.Date;
 import fcul.pco.eurosplit.domain.Table;
 import java.io.IOException;
@@ -105,11 +106,33 @@ public class Interp {
     private void showUsers() {
         // TODO 
     }
-
+    
+    /*
+     * Current user is replaced on a successfull login.
+     * Not sentitive to case for either email or name. 
+     * Additional methods were created in UserCatalog to get matching names.
+     * @param input 
+     */
     private void login(Scanner input) {
         System.out.print("Username: ");
         String username = input.nextLine();
-        // TODO 
+        if(!Start.getUserCatalog().hasUserWithName(username.toLowerCase())) {
+        	System.out.println("User not found");
+        	return;
+        };
+        
+        System.out.print("Email: ");
+        String email = input.nextLine();
+        if(!Start.getUserCatalog().getUserById(email).getName().toLowerCase().equals(username.toLowerCase())) {
+        	System.out.println("Email doesn't match.");
+        	return;
+        };
+        
+        this.currentUser = Start.getUserCatalog().getUserById(email);
+        
+        
+        
+        //TODO
     }
 
     private void makeNewSplit(Scanner input) {
@@ -150,7 +173,7 @@ public class Interp {
         if (currentUser == null) {
             this.prompt = ApplicationConfiguration.DEFAULT_PROMPT;
         }
-        /* remove this comment for the 4th serie of tasks.
+        
         else if (currentSplit == null) {
             this.prompt = currentUser.getName();
         }
