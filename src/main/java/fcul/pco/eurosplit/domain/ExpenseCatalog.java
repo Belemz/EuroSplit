@@ -62,4 +62,5 @@ public class ExpenseCatalog {
     public void load() throws FileNotFoundException {
         this.expenseCatalog = fcul.pco.eurosplit.persistence.ExpenseCatalog.load();
     }
+    
 }
