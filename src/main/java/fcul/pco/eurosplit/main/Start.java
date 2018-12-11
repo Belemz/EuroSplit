@@ -14,11 +14,22 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Start {
-    protected UserCatalog userCatalog;
+    private static UserCatalog userCatalog;
     private static ExpenseCatalog expenseCatalog;
 
     public static UserCatalog getUserCatalog() {
         return userCatalog;
+    }
+    
+    /*
+     * Adds user to current Start session.
+     */
+    public static void addUser(User u) {
+    	userCatalog.addUser(u);
+    }
+    
+    public static String getAllUsers() {
+    	return userCatalog.getAllUsers();
     }
 
     public static ExpenseCatalog getExpenseCatalog() {

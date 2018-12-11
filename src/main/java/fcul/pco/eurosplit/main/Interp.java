@@ -14,7 +14,7 @@ import java.util.Scanner;
  *
  * @author tl
  */
-public class Interp extends Start{
+public class Interp {
 
     /**
      * Contains the string that is correspond to interpreter's prompt. It is
@@ -105,17 +105,21 @@ public class Interp extends Start{
        this.currentUser = nUser;
        
        //adds a User instance to Start class UserCatalog instance.
-       super.userCatalog.addUser(this.currentUser);
-    	// TODO 
+       Start.addUser(this.currentUser);
     }
-
+    
+    /*
+     * Calls Start.getAllUsers from within Start class in order 
+     * to print Start.userCatalog instance users in table form.
+     */
+    private void showUsers() {
+        System.out.println(Start.getAllUsers());
+    }
+    
     private void quit() {
         save();
     }
 
-    private void showUsers() {
-        // TODO 
-    }
     
     /*
      * Current user is replaced on a successfull login.
