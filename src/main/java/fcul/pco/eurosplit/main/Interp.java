@@ -14,7 +14,7 @@ import java.util.Scanner;
  *
  * @author tl
  */
-public class Interp {
+public class Interp extends Start{
 
     /**
      * Contains the string that is correspond to interpreter's prompt. It is
@@ -33,7 +33,7 @@ public class Interp {
     /**
      * Contains the current Split
      */
-    // private Split currentSplit;
+    private Split currentSplit;
     /**
      *
      * @param input
@@ -96,7 +96,17 @@ public class Interp {
     }
 
     private void makeNewUser(Scanner input) {
-        // TODO 
+       System.out.print("User name: ");
+       String nName = input.nextLine();
+       System.out.print("Email address: ");
+       String nEmail = input.nextLine();
+       
+       User nUser = new User(nName, nEmail);
+       this.currentUser = nUser;
+       
+       //adds a User instance to Start class UserCatalog instance.
+       super.userCatalog.addUser(this.currentUser);
+    	// TODO 
     }
 
     private void quit() {
@@ -134,13 +144,35 @@ public class Interp {
         
         //TODO
     }
-
+    
+    /*
+     * Replaces this.currentSplit with nSplit, with logged in user as owner and event set by request.
+     * Replaces singleton SplitCatalog instance with this.currentSplit.
+     * @param input 
+     * @return this.currentSplit = nSplit;
+     */
     private void makeNewSplit(Scanner input) {
-        // TODO
+    	if(this.currentUser != null) {
+	    	
+    		Split nSplit = new Split(this.currentUser);
+	    	System.out.println("For what event is this split ? (i.e. «trip to Madrid», «house expenses», etc...)");
+	        String event = input.nextLine();
+	        Split.setEvent(event);
+	        this.currentSplit = nSplit;
+	        SplitCatalog nSplitC = new SplitCatalog(this.currentUser);
+    	
+    	} else {
+    		System.out.println("User must be logged in order to proceed.");
+    	}
     }
 
     private void selectSplit(Scanner input) {
-        // TODO
+        if(this.currentUser != null) {
+        	
+        	System.out.print("Name of split's owner ?")
+        	
+        }
+    	// TODO
     }
 
     private void printBalance() {

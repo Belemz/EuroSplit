@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Start {
-    private static UserCatalog userCatalog;
+    protected UserCatalog userCatalog;
     private static ExpenseCatalog expenseCatalog;
 
     public static UserCatalog getUserCatalog() {
