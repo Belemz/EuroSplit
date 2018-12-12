@@ -44,6 +44,19 @@ public class UserCatalog {
 		}
 	}
 	
+	public List<User> getUsersWithName(String name) {
+		List<User> l = new ArrayList<User>();
+		l.addAll(this.users.values());
+		
+		for(User u : l) {
+			String[] match = u.getName().split(" ");
+			if(!match[0].equalsIgnoreCase(name)){
+				l.remove(u);
+			};
+		}
+		return l;
+	}
+	
 	/*
 	 * This class was not implied by the teacher yet I found it useful for testing purposes.
 	 * @returns String
@@ -78,7 +91,7 @@ public class UserCatalog {
 		l.addAll(this.users.values());
 		
 		for(User u : l) {
-			if(u.getName().toLowerCase().equals(name)) {
+			if(u.getName().equalsIgnoreCase(name)) {
 				return true;
 			}
 		}

@@ -8,6 +8,7 @@ import fcul.pco.eurosplit.domain.Date;
 import fcul.pco.eurosplit.domain.Table;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -105,7 +106,7 @@ public class Interp {
        this.currentUser = nUser;
        
        //adds a User instance to Start class UserCatalog instance.
-       Start.addUser(this.currentUser);
+       Start.getUserCatalog().addUser(nUser);
     }
     
     /*
@@ -113,7 +114,7 @@ public class Interp {
      * to print Start.userCatalog instance users in table form.
      */
     private void showUsers() {
-        System.out.println(Start.getAllUsers());
+        System.out.println(Start.getUserCatalog().getAllUsers());
     }
     
     private void quit() {
@@ -130,14 +131,16 @@ public class Interp {
     private void login(Scanner input) {
         System.out.print("Username: ");
         String username = input.nextLine();
-        if(!Start.getUserCatalog().hasUserWithName(username.toLowerCase())) {
-        	System.out.println("User not found");
+        //verifies if user exists in Start.userCatalog
+        if(!Start.getUserCatalog().hasUserWithName(username)) {
+        	System.out.println("User not found.");
         	return;
         };
         
         System.out.print("Email: ");
         String email = input.nextLine();
-        if(!Start.getUserCatalog().getUserById(email).getName().toLowerCase().equals(username.toLowerCase())) {
+        //verifies if email corresponds to user in Start.userCatalog
+        if(!Start.getUserCatalog().getUserById(email).getName().equalsIgnoreCase(username)) {
         	System.out.println("Email doesn't match.");
         	return;
         };
@@ -169,12 +172,20 @@ public class Interp {
     		System.out.println("User must be logged in order to proceed.");
     	}
     }
-
+    
+    /*
+     * Falta corrigir este método com a classe split feita.
+     */
     private void selectSplit(Scanner input) {
         if(this.currentUser != null) {
         	
-        	System.out.print("Name of split's owner ?")
+        	System.out.print("Name of split's owner ?");
+        	String splitowner = input.nextLine();
         	
+        	// TODO
+        	
+        	System.out.println("Select a split number:");
+        	input.nextLine();
         }
     	// TODO
     }
@@ -274,6 +285,25 @@ public class Interp {
         }
     }
 
+    private User selectUser(Scanner input, String name) {
+    	List<User> list = Start.getUserCatalog().getUsersWithName(name);
+    	if (list.size() == 1) return list.get(0);
+    	int k;
+    	if (!list.isEmpty()) {
+	    	for (int i=0; i < list.size(); i++) {
+	    	System.out.println(i + " " + list.get(i));
+	    	}
+	    	System.out.print("Select a user: ");
+	    	k = Integer.parseInt(input.nextLine());
+    	} else {
+	    	System.out.println("User not found.");
+	    	System.out.print("Name: ");
+	    	name = input.nextLine();
+	    	return selectUser(input, name);
+    	}
+    	return list.get(k);
+    }
+    
     private boolean askYNQuestion(Scanner input, String question) {
         System.out.print(question + "? (y/n):");
         String answer = input.nextLine();

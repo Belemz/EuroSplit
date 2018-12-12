@@ -20,17 +20,6 @@ public class Start {
     public static UserCatalog getUserCatalog() {
         return userCatalog;
     }
-    
-    /*
-     * Adds user to current Start session.
-     */
-    public static void addUser(User u) {
-    	userCatalog.addUser(u);
-    }
-    
-    public static String getAllUsers() {
-    	return userCatalog.getAllUsers();
-    }
 
     public static ExpenseCatalog getExpenseCatalog() {
         return expenseCatalog;
