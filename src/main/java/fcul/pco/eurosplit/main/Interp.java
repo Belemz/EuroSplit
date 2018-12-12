@@ -7,8 +7,11 @@ import fcul.pco.eurosplit.domain.UserCatalog;
 import fcul.pco.eurosplit.domain.Date;
 import fcul.pco.eurosplit.domain.Table;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -189,9 +192,38 @@ public class Interp {
         }
     	// TODO
     }
-
+    
     private void printBalance() {
-        // TODO
+    	int numberPaidFor;
+    	int debitAmmount;
+    	int debitAmmountRemainder;
+    	int userBalanceUpdate;
+    	// TODO: Ainda tem de ser adicionar um método aleatório 
+    	// para dividir o resto por pessoas.
+    	Random generator =  new Random();
+    	UserCatalog user = Start.getUserCatalog();
+    	Map<User, Integer> userBalance;
+    	for(Expense nextExp : this.currentSplit.getExpenses) {
+    		numberPaidFor = nextExp.getPaidFor().size();
+    		debitAmmount = Math.floorDiv(nextExp.getValue(), numberPaidFor);
+    		debitAmmountRemainder = Math.floorMod(nextExp.getValue(), numberPaidFor);
+    		//de modo a conseguir criar uma lista dos balanços dos intervenientes
+    		//criei um map com keys user e int(saldo). Intervenientes vão sendo adicionados
+    		//com saldo 0 se ainda não tiverem sido adicionados.
+    		for(User paidFor : nextExp.getPaidFor()) {
+        		userBalance.putIfAbsent(paidFor, 0);
+        		userBalanceUpdate = userBalance.get(paidFor) - debitAmmount;
+        		userBalance.put(paidFor, userBalanceUpdate);
+        	}
+    		
+    		
+    		//agora adiciona-se o user pago (se não tiver aparecido antes) 
+    		//e incrementa-se o devido valor.
+    		userBalance.putIfAbsent(nextExp.getUser(), 0);
+    		userBalanceUpdate = (nextExp.getValue() - debitAmmount) + userBalance.get(nextExp.getUser());
+    		userBalance.put(nextExp.getUser(), userBalanceUpdate);
+        }
+    	// TODO
     }
 
     private void save() {
@@ -207,8 +239,31 @@ public class Interp {
         }
         // TODO
     }
-
+    
+    /*
+     * Creates a new Expense instance with the proper parameters.
+     * Adds the Expense to Interp.currentSplit, and Start.expenseCatalog.
+     */
     private void makeNewExpense(Scanner input) {
+        System.out.print("Expense made by you (" + this.currentUser.toString() + "). What did you pay for ?");
+        String theItem = input.nextLine();
+        
+        System.out.print("How much did you pay? ");
+        int theValue = input.nextInt();
+        
+        Expense nExpense = new Expense(theItem, theValue, currentUser);
+    	
+        String paidFor;
+        User whichUser;
+        do {
+	        System.out.print("Who did you pay for: («no one» to terminate");
+	        paidFor = input.nextLine();
+	        whichUser = this.selectUser(input, paidFor);
+	        nExpense.addPaidFor(whichUser);
+        } while(!paidFor.equalsIgnoreCase("no one"));
+        this.currentSplit.addSplit(nExpense);
+        
+        Start.getExpenseCatalog().addExpense(nExpense);
         // TODO
     }
 

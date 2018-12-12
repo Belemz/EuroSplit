@@ -110,7 +110,14 @@ public class Expense {
     public User getUser() {
         return this.paidBy;
     }
-
+    
+    /*
+     * Returns the list of paidFor Users
+     * @ return paidFor
+     */
+    public ArrayList<User> getPaidFor(){
+    	return this.paidFor;
+    }
     /*
      * Sets User instance. If already present, overwrites previous value.
      * @param paidBy
@@ -173,7 +180,7 @@ public class Expense {
         }
 
 
-        //todo: seria melhor usar o getID em vez do exp.id?
+        // TODO: seria melhor usar o getID em vez do exp.id?
         counter = (expense_object.id > counter) ? counter = expense_object.id : counter; //should we replace by getId()?
 
         return expense_object;
