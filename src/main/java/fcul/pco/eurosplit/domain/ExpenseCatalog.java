@@ -27,26 +27,9 @@ public class ExpenseCatalog {
      * @return Expense
      */
     public Expense getExpenseById(Integer id) {
-        //todo o que fazer quando não existe no dicionário um dado id ??
+        //todo o que fazer quando não existe no dicionário um dado id ?? null (deixo assim)
         return this.expenses.get(id);
     }
-
-    /*
-     * To separate the different expenses in each line! It turns the files more readable.
-     * @returns String
-     */
-    //todo perguntar se é necessário este toString ou se pode ficar só o load do expenses (idem para o userCatalog).
-//    public String toString() {
-//        StringBuilder expense_catalog_string = new StringBuilder();
-//
-//        for (Expense exp : this.expenses.values()) {
-//            expense_catalog_string.append(exp.toString());
-//            expense_catalog_string.append("\n");
-//        }
-//
-//        return expense_catalog_string.toString();
-//    }
-
 
     /*
      * Searches for an Expense within ExpenseCatalog for it's id.

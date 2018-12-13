@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Split {
 
-    private int id; //todo este id é do split ? Ou das expenseS?
+    private int id;
 
     private User owner;
 
@@ -20,27 +20,19 @@ public class Split {
 
     private final List<Expense> expenses;
 
+    private static int counter = 0;
 
-    //    public Split (){
-//        this.owner = null; //todo posso fazer isto? (perguntar ao thibault)
-//        this.id = 0;
-//        this.event = "";
-//        this.expenses = new ArrayList<>();
-//    }
-//
-//    public Split(int id, List<Expense> expenses){
-//
-//        this.expenses = expenses;
-//    }
-    public Split(User owner, int id, String event, List<Expense> expenses) {
-        this.owner = owner;
+
+    private Split(int id, User owner, String event) {
         this.id = id;
+        this.owner = owner;
         this.event = event;
-        this.expenses = expenses;
+        this.expenses = new ArrayList<>();
     }
 
-    public Split(User owner, int i, String s) {
-        this(null, 0, "", new ArrayList<>());
+    public Split(User owner, String events) {
+        this(counter++, owner, events);
+
     }
 
     public void setEvent(String event) {
@@ -70,26 +62,27 @@ public class Split {
             split_string.append(expense.getId()).append("-");
         }
 
-        //todo PERGUNTAR AO THIBAULT COMO APAGAR O ÚLTIMO -
         return split_string.toString().substring(0, split_string.length() - 1);
     }
 
     public static Split fromString(String split) {
         String[] split_string = split.split("#");
 
-        User owner = Start.getUserCatalog().getUserById(split_string[0]);
+        User owner = Start.getUserCatalog().getUserById(split_string[1]);
 
 
-        Split split_object = new Split(owner,
-                Integer.parseInt(split_string[1]),
-                split_string[2]);
+        Split split_object = new Split(Integer.parseInt(split_string[0]), owner, split_string[2]);
+
 
         for (String id : split_string[3].split("-")) {
             Expense expense = Start.getExpenseCatalog().getExpenseById(Integer.parseInt(id));
             split_object.addExpense(expense);
         }
 
+        counter = (split_object.id > counter) ? counter = split_object.id + 1 : counter;
+
         return split_object;
+
     }
 
 }

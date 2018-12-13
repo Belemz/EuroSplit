@@ -37,7 +37,6 @@ public class Expense {
      * an individual to the expense (identified by Name, Email).
      * @throws Exception.
      */
-
     private Expense(int id, String item, int value, User paidBy) {
         /*if (value <= 0) {
             //Doesn't allow negative value Expense instance to be created.
@@ -140,9 +139,9 @@ public class Expense {
 
         expense.append(this.when.toString()).append("#");
 
-        for (User u : this.paidFor) {
-            expense.append(u.getEmail()).append("|"); //todo confirmar no enunciado - O Símbolo e se podemos escrever apenas o email.
-            //todo remover os caracteres após o último e-mail
+        for (User user : this.paidFor) {
+            expense.append(user.getEmail()).append("§"); //todo confirmar no enunciado - O Símbolo e se podemos escrever apenas o email. sim
+            //todo remover os caracteres após o último e-mail sim
         }
 
         return expense.toString().substring(0, expense.length() - 1);
@@ -167,15 +166,12 @@ public class Expense {
 
         expense_object.when = Date.fromString(split_expense[4]);  //todo confirmar se posso fazer isto
 
-        for (String email : split_expense[5].split("|")) {
+        for (String email : split_expense[5].split("§")) {
             User paidFor_user = Start.getUserCatalog().getUserById(email);
             expense_object.addPaidFor(paidFor_user);
         }
 
-
-        //todo: seria melhor usar o getID em vez do exp.id?
-        counter = (expense_object.id > counter) ? counter = expense_object.id : counter; //should we replace by getId()?
-
+        counter = (expense_object.id > counter) ? counter = expense_object.id + 1 : counter; // we could also replace it by getId.
         return expense_object;
 
     }

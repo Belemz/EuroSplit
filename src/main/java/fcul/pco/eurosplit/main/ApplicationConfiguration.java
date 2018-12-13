@@ -13,6 +13,6 @@ public class ApplicationConfiguration {
     public static String SPLIT_CATALOG_FILENAME = "splitCatalog";
     public static String EXPENSES_CATALOG_FILENAME = "expensesCatalog";
 
-    static String DEFAULT_PROPMT = "EuroSplit";
+    static String DEFAULT_PROMPT = "EuroSplit";
 
 }
