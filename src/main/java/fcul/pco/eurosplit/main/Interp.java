@@ -1,7 +1,7 @@
 package fcul.pco.eurosplit.main;
 
 import fcul.pco.eurosplit.domain.Expense;
-import fcul.pco.eurosplit.domain.Split;
+// TODO: import fcul.pco.eurosplit.domain.Split;
 import fcul.pco.eurosplit.domain.User;
 import fcul.pco.eurosplit.domain.UserCatalog;
 import fcul.pco.eurosplit.domain.Date;
@@ -37,7 +37,7 @@ public class Interp {
     /**
      * Contains the current Split
      */
-    private Split currentSplit;
+    // TODO: private Split currentSplit;
     /**
      *
      * @param input
@@ -53,6 +53,7 @@ public class Interp {
      * @param command
      * @param input
      */
+    // TODO: Tem de se corrigir e testar "makeNewExpense" "printBalance" e "makeNewExpense"
     public void execute(String command, Scanner input) {
         switch (command) {
             case "help":
@@ -68,16 +69,16 @@ public class Interp {
                 login(input);
                 break;
             case "new split":
-                makeNewSplit(input);
+                //makeNewSplit(input);
                 break;
             case "select split":
                 selectSplit(input);
                 break;
             case "new expense":
-                makeNewExpense(input);
+                //makeNewExpense(input);
                 break;
             case "balance":
-                printBalance();
+                //printBalance();
                 break;
             case "quit":
                 quit();
@@ -161,7 +162,11 @@ public class Interp {
      * @param input 
      * @return this.currentSplit = nSplit;
      */
-    private void makeNewSplit(Scanner input) {
+    
+    /*
+     * TODO: 
+     * private void makeNewSplit(Scanner input) {
+     
     	if(this.currentUser != null) {
 	    	
     		Split nSplit = new Split(this.currentUser);
@@ -175,6 +180,7 @@ public class Interp {
     		System.out.println("User must be logged in order to proceed.");
     	}
     }
+     */
     
     
     private void selectSplit(Scanner input) {
@@ -191,6 +197,7 @@ public class Interp {
     	// TODO: ainda é preciso corrigir este 
     }
     
+    /* TODO:
     private void printBalance() {
     	int numberPaidFor;
     	int debitAmmount;
@@ -223,6 +230,7 @@ public class Interp {
         }
     	// TODO
     }
+    */
 
     private void save() {
         try {
@@ -242,6 +250,8 @@ public class Interp {
      * Creates a new Expense instance with the proper parameters.
      * Adds the Expense to Interp.currentSplit, and Start.expenseCatalog.
      */
+    
+    /*TODO:
     private void makeNewExpense(Scanner input) {
         System.out.print("Expense made by you (" + this.currentUser.toString() + "). What did you pay for ?");
         String theItem = input.nextLine();
@@ -264,11 +274,13 @@ public class Interp {
         Start.getExpenseCatalog().addExpense(nExpense);
         // TODO
     }
+    */
 
     public String getPrompt() {
         return prompt;
     }
-
+    
+    /* TODO:
     public void setPrompt() {
         if (currentUser == null) {
             this.prompt = ApplicationConfiguration.DEFAULT_PROMPT;
@@ -280,8 +292,8 @@ public class Interp {
         else {
             this.prompt = currentUser.getName() + "." + currentSplit.getPurpose();
         }
-         */
     }
+    */
 
     String nextToken() {
         String in;
@@ -308,6 +320,8 @@ public class Interp {
      * @param name
      * @return
      */
+    
+    /*TODO: QUANDO O setPrompt for corrigido tem de ser tirar isto
     private User selectOrCreateUser(Scanner input, String name) {
         ArrayList<User> list = null; // Start.getUserCatalog().getUsersWithName(name);
         if (list.isEmpty()) {
@@ -337,6 +351,7 @@ public class Interp {
             return list.get(i);
         }
     }
+    */
 
     private User selectUser(Scanner input, String name) {
     	List<User> list = Start.getUserCatalog().getUsersWithName(name);
