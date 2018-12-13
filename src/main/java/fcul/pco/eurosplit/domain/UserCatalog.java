@@ -138,7 +138,13 @@ public class UserCatalog {
 			tab.add(tabentry);
 		};
 		
-		return Table.tableToString(tab);
+		if(tab.size() != 0){
+			return Table.tableToString(tab);
+		} else {
+			String error = new String("No users found");
+			return error;
+			
+		}
 	}
 	
 }
