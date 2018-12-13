@@ -76,9 +76,9 @@ public class Expense {
      * Substitutes the name of the item.
      *@param item
      */
-    public void setItem(String item) {
-        this.item = item;
-    } //todo isto é necessário?
+//    public void setItem(String item) {
+//        this.item = item;
+//    } //todo isto é necessário?
 
 
     /*
@@ -111,6 +111,13 @@ public class Expense {
         return this.paidBy;
     }
 
+    /*
+     * Returns the list of paidFor Users
+     * @ return paidFor
+     */
+    public List<User> getPaidFor(){
+    	return this.paidFor;
+    }
     /*
      * Sets User instance. If already present, overwrites previous value.
      * @param paidBy
@@ -171,7 +178,8 @@ public class Expense {
             expense_object.addPaidFor(paidFor_user);
         }
 
-        counter = (expense_object.id > counter) ? counter = expense_object.id + 1 : counter; // we could also replace it by getId.
+        // we could also replace it by getId.
+        counter = (expense_object.id > counter) ? counter = expense_object.id + 1 : counter;
         return expense_object;
 
     }

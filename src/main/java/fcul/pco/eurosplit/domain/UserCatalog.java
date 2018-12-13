@@ -39,6 +39,18 @@ public class UserCatalog {
         }
     }
 
+    public List<User> getUsersWithName(String name) {
+        List<User> l = new ArrayList<User>();
+        l.addAll(this.users.values());
+
+        for(User u : l) {
+            String[] match = u.getName().split(" ");
+            if(!match[0].equalsIgnoreCase(name)){
+                l.remove(u);
+            };
+        }
+        return l;
+    }
 
     /*
      * Searches for a User within UserCatalog for it's email.
@@ -46,6 +58,23 @@ public class UserCatalog {
      */
     public boolean hasUserWithId(String email) {
         return this.users.containsKey(email);
+    }
+
+    /*
+     * Searches for a User according to his name.
+     * Non-sensitive to case.
+     */
+    public boolean hasUserWithName(String name) {
+        ArrayList<User> l = new ArrayList<User>();
+        l.addAll(this.users.values());
+
+        for(User u : l) {
+            if(u.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /*

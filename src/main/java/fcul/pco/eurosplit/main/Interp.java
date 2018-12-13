@@ -3,10 +3,15 @@ package fcul.pco.eurosplit.main;
 import fcul.pco.eurosplit.domain.Expense;
 import fcul.pco.eurosplit.domain.Split;
 import fcul.pco.eurosplit.domain.User;
+import fcul.pco.eurosplit.domain.UserCatalog;
 import fcul.pco.eurosplit.domain.Date;
 import fcul.pco.eurosplit.domain.Table;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -32,7 +37,7 @@ public class Interp {
     /**
      * Contains the current Split
      */
-    // private Split currentSplit;
+    private Split currentSplit;
     /**
      *
      * @param input
@@ -95,33 +100,130 @@ public class Interp {
     }
 
     private void makeNewUser(Scanner input) {
-        // TODO 
+       System.out.print("User name: ");
+       String nName = input.nextLine();
+       System.out.print("Email address: ");
+       String nEmail = input.nextLine();
+       
+       User nUser = new User(nName, nEmail);
+       this.currentUser = nUser;
+       
+       //adds a User instance to Start class UserCatalog instance.
+       Start.getUserCatalog().addUser(nUser);
     }
-
+    
+    /*
+     * Calls Start.getAllUsers from within Start class in order 
+     * to print Start.userCatalog instance users in table form.
+     */
+    private void showUsers() {
+        System.out.println(Start.getUserCatalog().getAllUsers());
+    }
+    
     private void quit() {
         save();
     }
 
-    private void showUsers() {
-        // TODO 
-    }
-
+    
+    /*
+     * Current user is replaced on a successfull login.
+     * Not sentitive to case for either email or name. 
+     * Additional methods were created in UserCatalog to get matching names.
+     * @param input 
+     */
     private void login(Scanner input) {
         System.out.print("Username: ");
         String username = input.nextLine();
-        // TODO 
+        //verifies if user exists in Start.userCatalog
+        if(!Start.getUserCatalog().hasUserWithName(username)) {
+        	System.out.println("User not found.");
+        	return;
+        };
+        
+        System.out.print("Email: ");
+        String email = input.nextLine();
+        //verifies if email corresponds to user in Start.userCatalog
+        if(!Start.getUserCatalog().getUserById(email).getName().equalsIgnoreCase(username)) {
+        	System.out.println("Email doesn't match.");
+        	return;
+        };
+        
+        this.currentUser = Start.getUserCatalog().getUserById(email);
+        
+        
+        
+        //TODO
     }
-
+    
+    /*
+     * Replaces this.currentSplit with nSplit, with logged in user as owner and event set by request.
+     * Replaces singleton SplitCatalog instance with this.currentSplit.
+     * @param input 
+     * @return this.currentSplit = nSplit;
+     */
     private void makeNewSplit(Scanner input) {
-        // TODO
+    	if(this.currentUser != null) {
+	    	
+    		Split nSplit = new Split(this.currentUser);
+	    	System.out.println("For what event is this split ? (i.e. «trip to Madrid», «house expenses», etc...)");
+	        String event = input.nextLine();
+	        Split.setEvent(event);
+	        this.currentSplit = nSplit;
+	        SplitCatalog nSplitC = new SplitCatalog(this.currentUser);
+    	
+    	} else {
+    		System.out.println("User must be logged in order to proceed.");
+    	}
     }
-
+    
+    /*
+     * Falta corrigir este método com a classe split feita.
+     */
     private void selectSplit(Scanner input) {
-        // TODO
+        if(this.currentUser != null) {
+        	
+        	System.out.print("Name of split's owner ?");
+        	String splitowner = input.nextLine();
+        	
+        	// TODO
+        	
+        	System.out.println("Select a split number:");
+        	input.nextLine();
+        }
+    	// TODO
     }
-
+    
     private void printBalance() {
-        // TODO
+    	int numberPaidFor;
+    	int debitAmmount;
+    	int debitAmmountRemainder;
+    	int userBalanceUpdate;
+    	// TODO: Ainda tem de ser adicionar um método aleatório 
+    	// para dividir o resto por pessoas.
+    	Random generator =  new Random();
+    	UserCatalog user = Start.getUserCatalog();
+    	Map<User, Integer> userBalance;
+    	for(Expense nextExp : this.currentSplit.getExpenses) {
+    		numberPaidFor = nextExp.getPaidFor().size();
+    		debitAmmount = Math.floorDiv(nextExp.getValue(), numberPaidFor);
+    		debitAmmountRemainder = Math.floorMod(nextExp.getValue(), numberPaidFor);
+    		//de modo a conseguir criar uma lista dos balanços dos intervenientes
+    		//criei um map com keys user e int(saldo). Intervenientes vão sendo adicionados
+    		//com saldo 0 se ainda não tiverem sido adicionados.
+    		for(User paidFor : nextExp.getPaidFor()) {
+        		userBalance.putIfAbsent(paidFor, 0);
+        		userBalanceUpdate = userBalance.get(paidFor) - debitAmmount;
+        		userBalance.put(paidFor, userBalanceUpdate);
+        	}
+    		
+    		
+    		//agora adiciona-se o user pago (se não tiver aparecido antes) 
+    		//e incrementa-se o devido valor.
+    		userBalance.putIfAbsent(nextExp.getUser(), 0);
+    		userBalanceUpdate = (nextExp.getValue() - debitAmmount) + userBalance.get(nextExp.getUser());
+    		userBalance.put(nextExp.getUser(), userBalanceUpdate);
+        }
+    	// TODO
     }
 
     private void save() {
@@ -137,8 +239,31 @@ public class Interp {
         }
         // TODO
     }
-
+    
+    /*
+     * Creates a new Expense instance with the proper parameters.
+     * Adds the Expense to Interp.currentSplit, and Start.expenseCatalog.
+     */
     private void makeNewExpense(Scanner input) {
+        System.out.print("Expense made by you (" + this.currentUser.toString() + "). What did you pay for ?");
+        String theItem = input.nextLine();
+        
+        System.out.print("How much did you pay? ");
+        int theValue = input.nextInt();
+        
+        Expense nExpense = new Expense(theItem, theValue, currentUser);
+    	
+        String paidFor;
+        User whichUser;
+        do {
+	        System.out.print("Who did you pay for: («no one» to terminate");
+	        paidFor = input.nextLine();
+	        whichUser = this.selectUser(input, paidFor);
+	        nExpense.addPaidFor(whichUser);
+        } while(!paidFor.equalsIgnoreCase("no one"));
+        this.currentSplit.addSplit(nExpense);
+        
+        Start.getExpenseCatalog().addExpense(nExpense);
         // TODO
     }
 
@@ -150,7 +275,7 @@ public class Interp {
         if (currentUser == null) {
             this.prompt = ApplicationConfiguration.DEFAULT_PROMPT;
         }
-        /* remove this comment for the 4th serie of tasks.
+        
         else if (currentSplit == null) {
             this.prompt = currentUser.getName();
         }
@@ -215,6 +340,25 @@ public class Interp {
         }
     }
 
+    private User selectUser(Scanner input, String name) {
+    	List<User> list = Start.getUserCatalog().getUsersWithName(name);
+    	if (list.size() == 1) return list.get(0);
+    	int k;
+    	if (!list.isEmpty()) {
+	    	for (int i=0; i < list.size(); i++) {
+	    	System.out.println(i + " " + list.get(i));
+	    	}
+	    	System.out.print("Select a user: ");
+	    	k = Integer.parseInt(input.nextLine());
+    	} else {
+	    	System.out.println("User not found.");
+	    	System.out.print("Name: ");
+	    	name = input.nextLine();
+	    	return selectUser(input, name);
+    	}
+    	return list.get(k);
+    }
+    
     private boolean askYNQuestion(Scanner input, String question) {
         System.out.print(question + "? (y/n):");
         String answer = input.nextLine();
