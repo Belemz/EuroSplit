@@ -45,22 +45,25 @@ public class Start {
     /*
      * Deletes the files saved as Catalogs from UserCatalog class.
      */
-    private static void deleteCatalogs() {
+    private static void deleteCatalogs() throws IOException {
         File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
                 + "/"
                 + ApplicationConfiguration.EXPENSES_CATALOG_FILENAME);
         f.delete();
+        f.createNewFile();
         f = new File(ApplicationConfiguration.ROOT_DIRECTORY
                 + "/"
                 + ApplicationConfiguration.USER_CATALOG_FILENAME);
         f.delete();
+        f.createNewFile();
         f = new File(ApplicationConfiguration.ROOT_DIRECTORY
                 + "/"
                 + ApplicationConfiguration.SPLIT_CATALOG_FILENAME);
         f.delete();
+        f.createNewFile();
     }
     
-    private static void run() {
+    private static void run() throws IOException {
     	deleteCatalogs();
     	Scanner input = new Scanner(System.in);
     	initialize();
@@ -73,8 +76,8 @@ public class Start {
     	
     	
     }
-    public static void main(String[] args) {
-        initialize();
+    public static void main(String[] args) throws IOException {
+        run();
 
         // int TEST = 1;
 
@@ -86,7 +89,7 @@ public class Start {
          * Adds User to catalog;
          * saves in "users.dat"
          * prints out catalog using UserCatalog.toString() (not implied by the exercise but usefull);
-         */
+         
         User user1 = new User("albino", "albino@hotmail.com");
         User user2 = new User("josefino", "josefino@netcabo.pt");
         User user3 = new User("carlino", "carlino@gmail.com");
@@ -119,10 +122,10 @@ public class Start {
         // System.out.println(catalog2.toString());
         //	}
 
-
+        /*
         Expense expense1 = new Expense("noitada", 30, user1);
         Expense expense2 = new Expense("Bowling", 16, user3);
-
+        
         expense1.addPaidFor(user3);
         expense1.addPaidFor(user2);
         expense2.addPaidFor(user1);
@@ -136,7 +139,7 @@ public class Start {
             e.printStackTrace();
         }
         System.out.println(expenses_catalog.toString());
-
+		*/
 //        ExpenseCatalog expense_list2 = new ExpenseCatalog();
 //        try {
 //            expense_list2.load();

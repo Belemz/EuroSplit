@@ -176,9 +176,7 @@ public class Interp {
     	}
     }
     
-    /*
-     * Falta corrigir este método com a classe split feita.
-     */
+    
     private void selectSplit(Scanner input) {
         if(this.currentUser != null) {
         	
@@ -190,7 +188,7 @@ public class Interp {
         	System.out.println("Select a split number:");
         	input.nextLine();
         }
-    	// TODO
+    	// TODO: ainda é preciso corrigir este 
     }
     
     private void printBalance() {
