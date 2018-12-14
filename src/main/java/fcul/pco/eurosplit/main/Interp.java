@@ -9,6 +9,7 @@ import fcul.pco.eurosplit.domain.Table;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -99,7 +100,7 @@ public class Interp {
         System.out.println("login: log a user in.");
         System.out.println("quit: terminate the program.");
     }
-
+    
     private void makeNewUser(Scanner input) {
        System.out.print("User name: ");
        String nName = input.nextLine();
@@ -108,11 +109,25 @@ public class Interp {
        
        User nUser = new User(nName, nEmail);
        this.currentUser = nUser;
+       // TODO: this.setPrompt();
        
        //adds a User instance to Start class UserCatalog instance.
        Start.getUserCatalog().addUser(nUser);
     }
-    
+
+    // @overload
+    private void makeNewUser(Scanner input, String nName) {
+        System.out.print("Email address: ");
+        String nEmail = input.nextLine();
+        
+        User nUser = new User(nName, nEmail);
+        this.currentUser = nUser;
+        // TODO: this.setPrompt();
+        
+        //adds a User instance to Start class UserCatalog instance.
+        Start.getUserCatalog().addUser(nUser);
+
+    };
     /*
      * Calls Start.getAllUsers from within Start class in order 
      * to print Start.userCatalog instance users in table form.
@@ -136,24 +151,21 @@ public class Interp {
         System.out.print("Username: ");
         String username = input.nextLine();
         //verifies if user exists in Start.userCatalog
-        if(!Start.getUserCatalog().hasUserWithName(username)) {
-        	System.out.println("User not found.");
-        	return;
-        };
+        this.selectOrCreateUser(input, username);
         
         System.out.print("Email: ");
         String email = input.nextLine();
         //verifies if email corresponds to user in Start.userCatalog
-        if(!Start.getUserCatalog().getUserById(email).getName().equalsIgnoreCase(username)) {
+        if(Start.getUserCatalog().hasUserWithId(email)) {
+        	this.currentUser = Start.getUserCatalog().getUserById(email);
+        } else {
         	System.out.println("Email doesn't match.");
         	return;
         };
         
-        this.currentUser = Start.getUserCatalog().getUserById(email);
         
         
-        
-        //TODO
+        //TODO: this.setPrompt();
     }
     
     /*
@@ -164,22 +176,22 @@ public class Interp {
      */
     
     /*
-     * TODO: 
-     * private void makeNewSplit(Scanner input) {
-     
-    	if(this.currentUser != null) {
+     TODO: 
+	private void makeNewSplit(Scanner input) {
+	 
+		if(this.currentUser != null) {
 	    	
-    		Split nSplit = new Split(this.currentUser);
+			Split nSplit = new Split(this.currentUser);
 	    	System.out.println("For what event is this split ? (i.e. «trip to Madrid», «house expenses», etc...)");
 	        String event = input.nextLine();
 	        Split.setEvent(event);
 	        this.currentSplit = nSplit;
 	        SplitCatalog nSplitC = new SplitCatalog(this.currentUser);
-    	
-    	} else {
-    		System.out.println("User must be logged in order to proceed.");
-    	}
-    }
+		
+		} else {
+			System.out.println("User must be logged in order to proceed.");
+		}
+	}
      */
     
     
@@ -234,11 +246,13 @@ public class Interp {
 
     private void save() {
         try {
+        	System.out.println("Saving User Catalog...");
             Start.getUserCatalog().save();
         } catch (IOException ex) {
             System.err.println("Error saving User Catalog.");
         }
         try {
+        	System.out.println("Saving Expense Catalog...");
             Start.getExpenseCatalog().save();
         } catch (IOException ex) {
             System.err.println("Error saving Expense Catalog.");
@@ -280,7 +294,7 @@ public class Interp {
         return prompt;
     }
     
-    /* TODO:
+    
     public void setPrompt() {
         if (currentUser == null) {
             this.prompt = ApplicationConfiguration.DEFAULT_PROMPT;
@@ -293,7 +307,6 @@ public class Interp {
             this.prompt = currentUser.getName() + "." + currentSplit.getPurpose();
         }
     }
-    */
 
     String nextToken() {
         String in;
@@ -321,17 +334,19 @@ public class Interp {
      * @return
      */
     
-    /*TODO: QUANDO O setPrompt for corrigido tem de ser tirar isto
+    
     private User selectOrCreateUser(Scanner input, String name) {
-        ArrayList<User> list = null; // Start.getUserCatalog().getUsersWithName(name);
+        ArrayList<User> list = Start.getUserCatalog().getUsersWithName(name);
+        //TODO: a little addition to handle inputmismatchexception
+        Boolean error = false;
         if (list.isEmpty()) {
             System.out.println("There is no registred user with name " + name + ".");
             if (askYNQuestion(input, "Do you want to create user " + name)) {
                 User theUser = currentUser;
-                // makeNewUser(input, name); <-- write this method
+                makeNewUser(input, name);
                 User newUser = currentUser;
                 currentUser = theUser;
-                setPrompt();
+                //TODO: setPrompt();
                 return newUser;
             } else {
                 // ask again:
@@ -342,16 +357,31 @@ public class Interp {
             return list.get(0);
         } else {
             int i = 0;
+            
             for (User u : list) {
                 System.out.print("(" + i + ") " + u.getName() + "[" + u.getEmail() + "] - ");
                 i++;
             }
             System.out.println("Which " + name + " ? ");
-            i = input.nextInt();
+            
+            do {
+            	error = false;
+	            try {
+	            	i = Integer.valueOf(input.nextLine());
+	            	//de forma a apanhar a excepção.
+	            	list.get(i);
+	            } catch (IndexOutOfBoundsException e1) {
+	            	System.out.println("Use an int within choice range...");
+	            	error = true;
+	            } catch (Exception e2) {
+	            	System.out.println("Please use an int...");
+	            	error = true;
+	            }
+            } while(error);
+            
             return list.get(i);
         }
     }
-    */
 
     private User selectUser(Scanner input, String name) {
     	List<User> list = Start.getUserCatalog().getUsersWithName(name);
@@ -383,4 +413,5 @@ public class Interp {
         return answer.equalsIgnoreCase("Y");
     }
 
+}
 }

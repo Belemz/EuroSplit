@@ -44,16 +44,19 @@ public class UserCatalog {
 		}
 	}
 	
-	public List<User> getUsersWithName(String name) {
-		List<User> l = new ArrayList<User>();
-		l.addAll(this.users.values());
+	/*
+	 * 
+	 */
+	public ArrayList<User> getUsersWithName(String name) {
+		ArrayList<User> l = new ArrayList<User>();
+		String[] match;
 		
-		for(User u : l) {
-			String[] match = u.getName().split(" ");
-			if(!match[0].equalsIgnoreCase(name)){
-				l.remove(u);
-			};
+		for(String key : this.users.keySet()) {
+			match = this.users.get(key).getName().split(" ");
+			
+			if(match[0].equalsIgnoreCase(name)) l.add(this.users.get(key));
 		}
+		
 		return l;
 	}
 	

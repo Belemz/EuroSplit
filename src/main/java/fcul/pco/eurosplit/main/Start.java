@@ -1,8 +1,3 @@
-package fcul.pco.eurosplit.main;
-/*
- * @author Cláudia Belém & Fábio Neves
- */
-
 import fcul.pco.eurosplit.domain.Expense;
 import fcul.pco.eurosplit.domain.ExpenseCatalog;
 import fcul.pco.eurosplit.domain.User;
