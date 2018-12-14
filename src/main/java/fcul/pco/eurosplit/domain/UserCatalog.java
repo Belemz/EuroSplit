@@ -12,13 +12,13 @@ import java.util.*;
 public class UserCatalog {
 
 
-    private Map<String, User> users;
+    private Map<String, User> users_map;
 
     private static UserCatalog instance;
 
 
     private UserCatalog() {
-        this.users = new HashMap<String, User>();
+        this.users_map = new HashMap<String, User>();
     }
 
     public static UserCatalog getInstance() {
@@ -34,7 +34,7 @@ public class UserCatalog {
      * @param u
      */
     public void addUser(User u) {
-        this.users.put(u.getEmail(), u);
+        this.users_map.put(u.getEmail(), u);
     }
 
     /*
@@ -43,8 +43,9 @@ public class UserCatalog {
      * @return User
      */
     public User getUserById(String key) {
-        if (this.users.containsKey(key)) {
-            return this.users.get(key);
+        // return this.users_map.getOrDefault(key, null);
+        if (this.users_map.containsKey(key)) {
+            return this.users_map.get(key);
         } else {
             return null;
         }
@@ -52,14 +53,13 @@ public class UserCatalog {
 
     public List<User> getUsersWithName(String name) {
         List<User> l = new ArrayList<User>();
-        l.addAll(this.users.values());
+        l.addAll(this.users_map.values());
 
         for (User u : l) {
             String[] match = u.getName().split(" ");
             if (!match[0].equalsIgnoreCase(name)) {
                 l.remove(u);
             }
-            ;
         }
         return l;
     }
@@ -69,7 +69,7 @@ public class UserCatalog {
      * @returns boolean
      */
     public boolean hasUserWithId(String email) {
-        return this.users.containsKey(email);
+        return this.users_map.containsKey(email);
     }
 
     /*
@@ -77,11 +77,9 @@ public class UserCatalog {
      * Non-sensitive to case.
      */
     public boolean hasUserWithName(String name) {
-        ArrayList<User> l = new ArrayList<User>();
-        l.addAll(this.users.values());
 
-        for (User u : l) {
-            if (u.getName().equalsIgnoreCase(name)) {
+        for (User user : this.users_map.values()) {
+            if (user.getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
@@ -92,19 +90,19 @@ public class UserCatalog {
     /*
      * Uses UserCatalog.save() from persistence package.
      * Persistence Package Full Path - fcul.pco.eurosplit.persistence.
-     * Saves to file "users.dat" with Users.toString method.
+     * Saves to file "users_map.dat" with Users.toString method.
      */
     public void save() throws IOException {
-        fcul.pco.eurosplit.persistence.UserCatalog.save(this.users);
+        fcul.pco.eurosplit.persistence.UserCatalog.save(this.users_map);
     }
 
     /*
      * Uses UserCatalog.load() from persistence package.
      * Persistence Package Full Path - fcul.pco.eurosplit.persistence.
-     * Loads from file "users.dat" with Users.fromString method reading each line one by one.
+     * Loads from file "users_map.dat" with Users.fromString method reading each line one by one.
      */
     public void load() throws FileNotFoundException {
-        this.users = fcul.pco.eurosplit.persistence.UserCatalog.load();
+        this.users_map = fcul.pco.eurosplit.persistence.UserCatalog.load();
     }
 
     /*
@@ -117,7 +115,7 @@ public class UserCatalog {
     public String getAllUsers() {
         ArrayList<User> l = new ArrayList<User>();
 
-        l.addAll(this.users.values());
+        l.addAll(this.users_map.values());
         Collections.sort(l);
 
         ArrayList<List<String>> tab = new ArrayList<List<String>>();

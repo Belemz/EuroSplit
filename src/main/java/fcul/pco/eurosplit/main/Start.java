@@ -133,9 +133,9 @@ public class Start {
 
         split3.addExpense(expense3);
 
-        splitCatalog.addSplit(user1, split1);
-        splitCatalog.addSplit(user1, split2);
-        splitCatalog.addSplit(user2, split3);
+        splitCatalog.addSplit(split1);
+        splitCatalog.addSplit(split2);
+        splitCatalog.addSplit(split3);
 
 
         try {
