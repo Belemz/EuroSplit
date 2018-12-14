@@ -177,7 +177,7 @@ public class Interp extends Start {
             	System.out.println("Email doesn't match.");
             	return;
             };
-        } else {System.out.println("User already logged in.");}
+        }
         
         
         this.setPrompt();
