@@ -114,20 +114,26 @@ public class UserCatalog {
      */
     public String getAllUsers() {
         ArrayList<User> l = new ArrayList<User>();
+        ArrayList<List<String>> tab = new ArrayList<List<String>>();
+        
+        String exception = new String();
 
         l.addAll(this.users_map.values());
         Collections.sort(l);
-
-        ArrayList<List<String>> tab = new ArrayList<List<String>>();
+        
         for (User u : l) {
-            ArrayList<String> tabentry = new ArrayList<String>();
+        	ArrayList<String> tabentry = new ArrayList<String>();
             tabentry.add(u.getName());
             tabentry.add(u.getEmail());
 
             tab.add(tabentry);
         }
-
-        return Table.tableToString(tab);
+        
+        try{
+        	return Table.tableToString(tab);	
+        } catch(IndexOutOfBoundsException e) {
+        	return exception = "No users added.";
+        }
     }
 
 }
