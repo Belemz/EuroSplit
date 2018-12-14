@@ -1,6 +1,8 @@
 package fcul.pco.eurosplit.main;
 
 import fcul.pco.eurosplit.domain.Expense;
+import fcul.pco.eurosplit.domain.Split;
+import fcul.pco.eurosplit.domain.SplitCatalog;
 // TODO: import fcul.pco.eurosplit.domain.Split;
 import fcul.pco.eurosplit.domain.User;
 import fcul.pco.eurosplit.domain.UserCatalog;
@@ -38,7 +40,7 @@ public class Interp {
     /**
      * Contains the current Split
      */
-    // TODO: private Split currentSplit;
+    private Split currentSplit;
     /**
      *
      * @param input
@@ -70,16 +72,16 @@ public class Interp {
                 login(input);
                 break;
             case "new split":
-                //makeNewSplit(input);
+                makeNewSplit(input);
                 break;
             case "select split":
                 selectSplit(input);
                 break;
             case "new expense":
-                //makeNewExpense(input);
+                makeNewExpense(input);
                 break;
             case "balance":
-                //printBalance();
+                printBalance();
                 break;
             case "quit":
                 quit();
@@ -165,7 +167,7 @@ public class Interp {
         
         
         
-        //TODO: this.setPrompt();
+        this.setPrompt();
     }
     
     /*
@@ -175,24 +177,20 @@ public class Interp {
      * @return this.currentSplit = nSplit;
      */
     
-    /*
-     TODO: 
+    
 	private void makeNewSplit(Scanner input) {
 	 
 		if(this.currentUser != null) {
-	    	
-			Split nSplit = new Split(this.currentUser);
 	    	System.out.println("For what event is this split ? (i.e. «trip to Madrid», «house expenses», etc...)");
 	        String event = input.nextLine();
-	        Split.setEvent(event);
+	        Split nSplit = new Split(this.currentUser, event);
 	        this.currentSplit = nSplit;
-	        SplitCatalog nSplitC = new SplitCatalog(this.currentUser);
+	        SplitCatalog.getInstance().addSplit(this.currentUser, this.currentSplit);
 		
 		} else {
 			System.out.println("User must be logged in order to proceed.");
 		}
 	}
-     */
     
     
     private void selectSplit(Scanner input) {
@@ -208,8 +206,7 @@ public class Interp {
         }
     	// TODO: ainda é preciso corrigir este 
     }
-    
-    /* TODO:
+
     private void printBalance() {
     	int numberPaidFor;
     	int debitAmmount;
@@ -219,8 +216,8 @@ public class Interp {
     	// para dividir o resto por pessoas.
     	Random generator =  new Random();
     	UserCatalog user = Start.getUserCatalog();
-    	Map<User, Integer> userBalance;
-    	for(Expense nextExp : this.currentSplit.getExpenses) {
+    	Map<User, Integer> userBalance = null;
+    	for(Expense nextExp : this.currentSplit.getExpenses()) {
     		numberPaidFor = nextExp.getPaidFor().size();
     		debitAmmount = Math.floorDiv(nextExp.getValue(), numberPaidFor);
     		debitAmmountRemainder = Math.floorMod(nextExp.getValue(), numberPaidFor);
@@ -242,7 +239,6 @@ public class Interp {
         }
     	// TODO
     }
-    */
 
     private void save() {
         try {
@@ -265,9 +261,16 @@ public class Interp {
      * Adds the Expense to Interp.currentSplit, and Start.expenseCatalog.
      */
     
-    /*TODO:
+    
     private void makeNewExpense(Scanner input) {
-        System.out.print("Expense made by you (" + this.currentUser.toString() + "). What did you pay for ?");
+        try {
+        	this.currentUser.equals(null);
+        	} catch (NullPointerException e) {
+        		System.out.println("You must be logged in to proceed.");
+            	return;
+        	}
+        
+    	System.out.print("Expense made by you (" + this.currentUser.toString() + "). What did you pay for ?");
         String theItem = input.nextLine();
         
         System.out.print("How much did you pay? ");
@@ -283,12 +286,11 @@ public class Interp {
 	        whichUser = this.selectUser(input, paidFor);
 	        nExpense.addPaidFor(whichUser);
         } while(!paidFor.equalsIgnoreCase("no one"));
-        this.currentSplit.addSplit(nExpense);
+        this.currentSplit.addExpense(nExpense);
         
         Start.getExpenseCatalog().addExpense(nExpense);
         // TODO
     }
-    */
 
     public String getPrompt() {
         return prompt;
@@ -304,7 +306,7 @@ public class Interp {
             this.prompt = currentUser.getName();
         }
         else {
-            this.prompt = currentUser.getName() + "." + currentSplit.getPurpose();
+            this.prompt = currentUser.getName() + "." + currentSplit.getEvent();
         }
     }
 
