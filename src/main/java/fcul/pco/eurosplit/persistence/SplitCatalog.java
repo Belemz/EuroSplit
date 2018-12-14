@@ -22,7 +22,9 @@ public class SplitCatalog {
 
         try (BufferedWriter file_write = new BufferedWriter(new FileWriter(ROOT_DIRECTORY + SPLIT_CATALOG_FILENAME))) {
 
+
             for (List<Split> user_split_list : splits.values()) {
+
                 for (Split split : user_split_list) {
                     file_write.write(split.toString() + ",");   // TODO : REMOVER A ÚLTIMA , DO FICHEIRO
                 }

@@ -29,7 +29,7 @@ public class Start {
     }
 
     public static void initialize() {
-        userCatalog = new UserCatalog();
+        userCatalog = UserCatalog.getInstance();
         try {
             userCatalog.load();
         } catch (FileNotFoundException e) {
@@ -37,7 +37,7 @@ public class Start {
         }
 
 
-        expenseCatalog = new ExpenseCatalog();
+        expenseCatalog = ExpenseCatalog.getInstance();
         try {
             expenseCatalog.load();
         } catch (FileNotFoundException e) {
@@ -101,11 +101,7 @@ public class Start {
         userCatalog.addUser(user2);
         userCatalog.addUser(user3);
 
-        try {
-            userCatalog.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
 
         Expense expense1 = new Expense("avião", 30, user1);
@@ -124,11 +120,7 @@ public class Start {
         expenseCatalog.addExpense(expense1);
         expenseCatalog.addExpense(expense2);
         expenseCatalog.addExpense(expense3);
-        try {
-            expenseCatalog.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         Split split1 = new Split(user1, "viagem a Madrid");
         Split split2 = new Split(user1, "aniversário");
@@ -144,6 +136,22 @@ public class Start {
         splitCatalog.addSplit(user1, split1);
         splitCatalog.addSplit(user1, split2);
         splitCatalog.addSplit(user2, split3);
+
+
+        try {
+            userCatalog.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            expenseCatalog.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
 
         try {
             splitCatalog.save();

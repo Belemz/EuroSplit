@@ -52,7 +52,7 @@ public class Expense {
     }
 
     public Expense(String item, int value, User paidBy) {
-        this(counter++, item, value, paidBy);
+        this(++counter, item, value, paidBy);
     }
 
     /**
@@ -179,7 +179,7 @@ public class Expense {
         }
 
         // we could also replace it by getId.
-        counter = (expense_object.id > counter) ? counter = expense_object.id + 1 : counter;
+        counter = (expense_object.id > counter) ? (expense_object.id) : counter;
         return expense_object;
 
     }

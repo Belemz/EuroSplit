@@ -9,9 +9,21 @@ public class ExpenseCatalog {
 
     private Map<Integer, Expense> expenses;
 
-    public ExpenseCatalog() {
+    private static ExpenseCatalog instance;
+
+
+    private ExpenseCatalog() {
         this.expenses = new HashMap<Integer, Expense>();
     }
+
+
+    public static ExpenseCatalog getInstance() {
+        if (instance == null) {
+            instance = new ExpenseCatalog();
+        }
+        return instance;
+    }
+
 
     /*
      * Stores expense instance to ExpenseCatalog.

@@ -1,17 +1,11 @@
 package fcul.pco.eurosplit.main;
 
-import fcul.pco.eurosplit.domain.Expense;
 import fcul.pco.eurosplit.domain.Split;
 import fcul.pco.eurosplit.domain.User;
-import fcul.pco.eurosplit.domain.UserCatalog;
-import fcul.pco.eurosplit.domain.Date;
-import fcul.pco.eurosplit.domain.Table;
+
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -68,16 +62,16 @@ public class Interp {
                 login(input);
                 break;
             case "new split":
-                makeNewSplit(input);
+                //    makeNewSplit(input);   TODO NÃƒO FUNCIONA
                 break;
             case "select split":
                 selectSplit(input);
                 break;
             case "new expense":
-                makeNewExpense(input);
+                //   makeNewExpense(input);
                 break;
             case "balance":
-                printBalance();
+                //  printBalance();
                 break;
             case "quit":
                 quit();
@@ -161,23 +155,23 @@ public class Interp {
      * @param input 
      * @return this.currentSplit = nSplit;
      */
-    private void makeNewSplit(Scanner input) {
-    	if(this.currentUser != null) {
-	    	
-    		Split nSplit = new Split(this.currentUser);
-	    	System.out.println("For what event is this split ? (i.e. «trip to Madrid», «house expenses», etc...)");
-	        String event = input.nextLine();
-	        Split.setEvent(event);
-	        this.currentSplit = nSplit;
-	        SplitCatalog nSplitC = new SplitCatalog(this.currentUser);
-    	
-    	} else {
-    		System.out.println("User must be logged in order to proceed.");
-    	}
-    }
+//    private void makeNewSplit(Scanner input) {
+//    	if(this.currentUser != null) {
+//
+//    		Split nSplit = new Split(this.currentUser);
+//	    	System.out.println("For what event is this split ? (i.e. ï¿½trip to Madridï¿½, ï¿½house expensesï¿½, etc...)");
+//	        String event = input.nextLine();
+//	        Split.setEvent(event);
+//	        this.currentSplit = nSplit;
+//	        SplitCatalog nSplitC = new SplitCatalog(this.currentUser);
+//
+//    	} else {
+//    		System.out.println("User must be logged in order to proceed.");
+//    	}
+//    }
     
     /*
-     * Falta corrigir este método com a classe split feita.
+     * Falta corrigir este mï¿½todo com a classe split feita.
      */
     private void selectSplit(Scanner input) {
         if(this.currentUser != null) {
@@ -192,39 +186,39 @@ public class Interp {
         }
     	// TODO
     }
-    
-    private void printBalance() {
-    	int numberPaidFor;
-    	int debitAmmount;
-    	int debitAmmountRemainder;
-    	int userBalanceUpdate;
-    	// TODO: Ainda tem de ser adicionar um método aleatório 
-    	// para dividir o resto por pessoas.
-    	Random generator =  new Random();
-    	UserCatalog user = Start.getUserCatalog();
-    	Map<User, Integer> userBalance;
-    	for(Expense nextExp : this.currentSplit.getExpenses) {
-    		numberPaidFor = nextExp.getPaidFor().size();
-    		debitAmmount = Math.floorDiv(nextExp.getValue(), numberPaidFor);
-    		debitAmmountRemainder = Math.floorMod(nextExp.getValue(), numberPaidFor);
-    		//de modo a conseguir criar uma lista dos balanços dos intervenientes
-    		//criei um map com keys user e int(saldo). Intervenientes vão sendo adicionados
-    		//com saldo 0 se ainda não tiverem sido adicionados.
-    		for(User paidFor : nextExp.getPaidFor()) {
-        		userBalance.putIfAbsent(paidFor, 0);
-        		userBalanceUpdate = userBalance.get(paidFor) - debitAmmount;
-        		userBalance.put(paidFor, userBalanceUpdate);
-        	}
-    		
-    		
-    		//agora adiciona-se o user pago (se não tiver aparecido antes) 
-    		//e incrementa-se o devido valor.
-    		userBalance.putIfAbsent(nextExp.getUser(), 0);
-    		userBalanceUpdate = (nextExp.getValue() - debitAmmount) + userBalance.get(nextExp.getUser());
-    		userBalance.put(nextExp.getUser(), userBalanceUpdate);
-        }
-    	// TODO
-    }
+
+//    private void printBalance() {
+//    	int numberPaidFor;
+//    	int debitAmmount;
+//    	int debitAmmountRemainder;
+//    	int userBalanceUpdate;
+//    	// TODO: Ainda tem de ser adicionar um mï¿½todo aleatï¿½rio
+//    	// para dividir o resto por pessoas.
+//    	Random generator =  new Random();
+//    	UserCatalog user = Start.getUserCatalog();
+//    	Map<User, Integer> userBalance;
+//    	for(Expense nextExp : this.currentSplit.getExpenses) {
+//    		numberPaidFor = nextExp.getPaidFor().size();
+//    		debitAmmount = Math.floorDiv(nextExp.getValue(), numberPaidFor);
+//    		debitAmmountRemainder = Math.floorMod(nextExp.getValue(), numberPaidFor);
+//    		//de modo a conseguir criar uma lista dos balanï¿½os dos intervenientes
+//    		//criei um map com keys user e int(saldo). Intervenientes vï¿½o sendo adicionados
+//    		//com saldo 0 se ainda nï¿½o tiverem sido adicionados.
+//    		for(User paidFor : nextExp.getPaidFor()) {
+//        		userBalance.putIfAbsent(paidFor, 0);
+//        		userBalanceUpdate = userBalance.get(paidFor) - debitAmmount;
+//        		userBalance.put(paidFor, userBalanceUpdate);
+//        	}
+//
+//
+//    		//agora adiciona-se o user pago (se nï¿½o tiver aparecido antes)
+//    		//e incrementa-se o devido valor.
+//    		userBalance.putIfAbsent(nextExp.getUser(), 0);
+//    		userBalanceUpdate = (nextExp.getValue() - debitAmmount) + userBalance.get(nextExp.getUser());
+//    		userBalance.put(nextExp.getUser(), userBalanceUpdate);
+//        }
+//    	// TODO
+//    }
 
     private void save() {
         try {
@@ -244,46 +238,46 @@ public class Interp {
      * Creates a new Expense instance with the proper parameters.
      * Adds the Expense to Interp.currentSplit, and Start.expenseCatalog.
      */
-    private void makeNewExpense(Scanner input) {
-        System.out.print("Expense made by you (" + this.currentUser.toString() + "). What did you pay for ?");
-        String theItem = input.nextLine();
-        
-        System.out.print("How much did you pay? ");
-        int theValue = input.nextInt();
-        
-        Expense nExpense = new Expense(theItem, theValue, currentUser);
-    	
-        String paidFor;
-        User whichUser;
-        do {
-	        System.out.print("Who did you pay for: («no one» to terminate");
-	        paidFor = input.nextLine();
-	        whichUser = this.selectUser(input, paidFor);
-	        nExpense.addPaidFor(whichUser);
-        } while(!paidFor.equalsIgnoreCase("no one"));
-        this.currentSplit.addSplit(nExpense);
-        
-        Start.getExpenseCatalog().addExpense(nExpense);
-        // TODO
-    }
+//    private void makeNewExpense(Scanner input) {
+//        System.out.print("Expense made by you (" + this.currentUser.toString() + "). What did you pay for ?");
+//        String theItem = input.nextLine();
+//
+//        System.out.print("How much did you pay? ");
+//        int theValue = input.nextInt();
+//
+//        Expense nExpense = new Expense(theItem, theValue, currentUser);
+//
+//        String paidFor;
+//        User whichUser;
+//        do {
+//	        System.out.print("Who did you pay for: (ï¿½no oneï¿½ to terminate");
+//	        paidFor = input.nextLine();
+//	        whichUser = this.selectUser(input, paidFor);
+//	        nExpense.addPaidFor(whichUser);
+//        } while(!paidFor.equalsIgnoreCase("no one"));
+//        this.currentSplit.addSplit(nExpense);
+//
+//        Start.getExpenseCatalog().addExpense(nExpense);
+//        // TODO
+//    }
 
     public String getPrompt() {
         return prompt;
     }
 
-    public void setPrompt() {
-        if (currentUser == null) {
-            this.prompt = ApplicationConfiguration.DEFAULT_PROMPT;
-        }
-        
-        else if (currentSplit == null) {
-            this.prompt = currentUser.getName();
-        }
-        else {
-            this.prompt = currentUser.getName() + "." + currentSplit.getPurpose();
-        }
-         */
-    }
+//    public void setPrompt() {
+//        if (currentUser == null) {
+//            this.prompt = ApplicationConfiguration.DEFAULT_PROMPT;
+//        }
+//
+//        else if (currentSplit == null) {
+//            this.prompt = currentUser.getName();
+//        }
+//        else {
+//            this.prompt = currentUser.getName() + "." + currentSplit.getPurpose();
+//        }
+//
+//    }
 
     String nextToken() {
         String in;
@@ -319,7 +313,7 @@ public class Interp {
                 // makeNewUser(input, name); <-- write this method
                 User newUser = currentUser;
                 currentUser = theUser;
-                setPrompt();
+                //    setPrompt();
                 return newUser;
             } else {
                 // ask again:

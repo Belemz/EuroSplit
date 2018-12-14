@@ -14,9 +14,20 @@ public class UserCatalog {
 
     private Map<String, User> users;
 
-    public UserCatalog() {
+    private static UserCatalog instance;
+
+
+    private UserCatalog() {
         this.users = new HashMap<String, User>();
     }
+
+    public static UserCatalog getInstance() {
+        if (instance == null) {
+            instance = new UserCatalog();
+        }
+        return instance;
+    }
+
 
     /*
      * Stores user instance to UserCatalog.
@@ -43,11 +54,12 @@ public class UserCatalog {
         List<User> l = new ArrayList<User>();
         l.addAll(this.users.values());
 
-        for(User u : l) {
+        for (User u : l) {
             String[] match = u.getName().split(" ");
-            if(!match[0].equalsIgnoreCase(name)){
+            if (!match[0].equalsIgnoreCase(name)) {
                 l.remove(u);
-            };
+            }
+            ;
         }
         return l;
     }
@@ -68,8 +80,8 @@ public class UserCatalog {
         ArrayList<User> l = new ArrayList<User>();
         l.addAll(this.users.values());
 
-        for(User u : l) {
-            if(u.getName().equalsIgnoreCase(name)) {
+        for (User u : l) {
+            if (u.getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
@@ -96,9 +108,9 @@ public class UserCatalog {
     }
 
     /*
-     * !!!A vari�vel que � alimentada ao m�todo Table.tableToString
+     * !!!A variável que é alimentada ao método Table.tableToString
      * foi alterada para ArrayList<List<String>> para ser
-     * compat�vel.!!!
+     * compatível.!!!
      * Returns the all the values within map sorted.
      * @return ArrayList<User>
      */
@@ -116,7 +128,6 @@ public class UserCatalog {
 
             tab.add(tabentry);
         }
-        ;
 
         return Table.tableToString(tab);
     }

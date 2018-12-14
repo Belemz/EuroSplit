@@ -36,7 +36,7 @@ public class SplitCatalog {
         this.splits.put(user, split_list);   // TODO confirmar este método
     }
 
-    public void addSplit(User user, Split split) {   // TODO FALTA RESOLVER SE O UTILIZADOR NÃO EXISTIR
+    public void addSplit(User user, Split split) {
         List<Split> split_list = getUserSplits(user);
 
         if (split_list == null) {
