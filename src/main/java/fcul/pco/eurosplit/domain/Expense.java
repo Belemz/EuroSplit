@@ -3,6 +3,7 @@ package fcul.pco.eurosplit.domain;
 import fcul.pco.eurosplit.main.Start;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /*
@@ -21,7 +22,7 @@ public class Expense {
 
     private User paidBy;
 
-    private ArrayList<User> paidFor;
+    private List<User> paidFor; //todo pode ser com a interface em vez da classe?
 
     private Date when;
 
@@ -36,7 +37,6 @@ public class Expense {
      * an individual to the expense (identified by Name, Email).
      * @throws Exception.
      */
-
     private Expense(int id, String item, int value, User paidBy) {
         /*if (value <= 0) {
             //Doesn't allow negative value Expense instance to be created.
@@ -76,9 +76,9 @@ public class Expense {
      * Substitutes the name of the item.
      *@param item
      */
-    public void setItem(String item) {
-        this.item = item;
-    }
+//    public void setItem(String item) {
+//        this.item = item;
+//    } //todo isto é necessário?
 
 
     /*
@@ -110,12 +110,12 @@ public class Expense {
     public User getUser() {
         return this.paidBy;
     }
-    
+
     /*
      * Returns the list of paidFor Users
      * @ return paidFor
      */
-    public ArrayList<User> getPaidFor(){
+    public List<User> getPaidFor(){
     	return this.paidFor;
     }
     /*
@@ -125,7 +125,7 @@ public class Expense {
      */
     public void setUser(String name, String email) {
         this.paidBy = new User(name, email);
-    }
+    } // todo isto é necessário?
 
     public void addPaidFor(User user) {
         this.paidFor.add(user);
@@ -146,9 +146,9 @@ public class Expense {
 
         expense.append(this.when.toString()).append("#");
 
-        for (User u : this.paidFor) {
-            expense.append(u.getEmail()).append("|"); //todo confirmar no enunciado - O Símbolo e se podemos escrever apenas o email.
-            //todo remover os caracteres após o último e-mail
+        for (User user : this.paidFor) {
+            expense.append(user.getEmail()).append("§"); //todo confirmar no enunciado - O Símbolo e se podemos escrever apenas o email. sim
+            //todo remover os caracteres após o último e-mail sim
         }
 
         return expense.toString().substring(0, expense.length() - 1);
@@ -171,18 +171,15 @@ public class Expense {
                 Integer.parseInt(split_expense[2]),
                 paidBy_user);
 
-        System.out.println(split_expense[4]);
         expense_object.when = Date.fromString(split_expense[4]);  //todo confirmar se posso fazer isto
 
-        for (String email : split_expense[5].split("|")) {
+        for (String email : split_expense[5].split("§")) {
             User paidFor_user = Start.getUserCatalog().getUserById(email);
             expense_object.addPaidFor(paidFor_user);
         }
 
-
-        // TODO: seria melhor usar o getID em vez do exp.id?
-        counter = (expense_object.id > counter) ? counter = expense_object.id : counter; //should we replace by getId()?
-
+        // we could also replace it by getId.
+        counter = (expense_object.id > counter) ? counter = expense_object.id + 1 : counter;
         return expense_object;
 
     }

@@ -32,7 +32,7 @@ public class UserCatalog {
 
 
     public static Map<String, User> load() throws FileNotFoundException {
-        HashMap<String, User> map_users = new HashMap<String, User>();
+        Map<String, User> map_users = new HashMap<String, User>();
 
         try (Scanner inputFromFile = new Scanner(new BufferedReader(new FileReader(ROOT_DIRECTORY + USER_CATALOG_FILENAME)))) {
 

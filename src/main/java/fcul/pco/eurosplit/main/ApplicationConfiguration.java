@@ -13,6 +13,10 @@ public class ApplicationConfiguration {
     public static String SPLIT_CATALOG_FILENAME = "splitCatalog.dat";
     public static String EXPENSES_CATALOG_FILENAME = "expensesCatalog.dat";
 
+<<<<<<< HEAD
     public static String DEFAULT_PROMPT = "EuroSplit";
+=======
+    static String DEFAULT_PROMPT = "EuroSplit";
+>>>>>>> branch 'master' of https://github.com/Belemz/EuroSplit.git
 
 }
