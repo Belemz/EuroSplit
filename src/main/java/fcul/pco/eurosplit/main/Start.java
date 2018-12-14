@@ -3,7 +3,9 @@ package fcul.pco.eurosplit.main;
  * @author Cláudia Belém & Fábio Neves
  */
 
-import fcul.pco.eurosplit.domain.*;
+import fcul.pco.eurosplit.domain.ExpenseCatalog;
+import fcul.pco.eurosplit.domain.SplitCatalog;
+import fcul.pco.eurosplit.domain.UserCatalog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -75,26 +77,34 @@ public class Start {
         f.createNewFile();
     }
 
+    // o run não pode ter throws. faz catch dentro do método (à volta do delete) ou dentro do próprio método delete!
+    // Não faz sentido fazer throws no main! Isso dá uma exceção sem dar erro. Ou faz catch no main ou antes.
     private static void run() throws IOException {
-    	deleteCatalogs();
-    	Scanner input = new Scanner(System.in);
-    	initialize();
-    	Interp interp = new Interp(input);
-    	String command = "";
-    	do {
-    		command = interp.nextToken();
-    		interp.execute(command, input);
-    	} while (!command.equals("quit"));
+        deleteCatalogs();
+        Scanner input = new Scanner(System.in);
+        initialize();
+        Interp interp = new Interp(input);
+        String command = "";
+
+        System.out.println("Type 'help' to show available commands.");
+
+        do {
+            command = interp.nextToken();
+            interp.execute(command, input);
+        } while (!command.equals("quit"));
 
 
     }
 
-    // TODO: Fazer trycatch instead of thows in main
     public static void main(String[] args) {
+        //TODO Confirmar posição do try
+        try {
+            run();
+        } catch (IOException e) {
+            System.err.println("The file was not found.");
+        }
 
-        run();
-
-
+/*
         User user1 = new User("albino", "albino@hotmail.com");
         User user2 = new User("josefino", "josefino@netcabo.pt");
         User user3 = new User("carlino", "carlino@gmail.com");
@@ -159,7 +169,7 @@ public class Start {
             splitCatalog.save();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
     }
