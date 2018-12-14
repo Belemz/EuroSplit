@@ -26,7 +26,7 @@ public class Start {
     }
 
     public static void initialize() {
-        userCatalog = new UserCatalog();
+        userCatalog = UserCatalog.getInstance();
         try {
             userCatalog.load();
         } catch (FileNotFoundException e) {
@@ -34,7 +34,7 @@ public class Start {
         }
 
 
-        expenseCatalog = new ExpenseCatalog();
+        expenseCatalog = ExpenseCatalog.getInstance();
         try {
             expenseCatalog.load();
         } catch (FileNotFoundException e) {
