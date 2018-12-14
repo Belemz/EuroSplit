@@ -57,40 +57,42 @@ public class Start {
     /*
      * Deletes the files saved as Catalogs from UserCatalog class.
      */
-    private static void deleteCatalogs() {
+    private static void deleteCatalogs() throws IOException {
         File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
                 + "/"
                 + ApplicationConfiguration.EXPENSES_CATALOG_FILENAME);
         f.delete();
-
+        f.createNewFile();
         f = new File(ApplicationConfiguration.ROOT_DIRECTORY
                 + "/"
                 + ApplicationConfiguration.USER_CATALOG_FILENAME);
         f.delete();
-
+        f.createNewFile();
         f = new File(ApplicationConfiguration.ROOT_DIRECTORY
                 + "/"
                 + ApplicationConfiguration.SPLIT_CATALOG_FILENAME);
         f.delete();
+        f.createNewFile();
     }
 
-    private static void run() {
-        deleteCatalogs();
-        Scanner input = new Scanner(System.in);
-        initialize();
-        Interp interp = new Interp(input);
-        String command = "";
-        do {
-            command = interp.nextToken();
-            interp.execute(command, input);
-        } while (!command.equals("quit"));
+    private static void run() throws IOException {
+    	deleteCatalogs();
+    	Scanner input = new Scanner(System.in);
+    	initialize();
+    	Interp interp = new Interp(input);
+    	String command = "";
+    	do {
+    		command = interp.nextToken();
+    		interp.execute(command, input);
+    	} while (!command.equals("quit"));
 
 
     }
 
-
+    // TODO: Fazer trycatch instead of thows in main
     public static void main(String[] args) {
-        initialize();
+
+        run();
 
 
         User user1 = new User("albino", "albino@hotmail.com");

@@ -9,10 +9,10 @@ package fcul.pco.eurosplit.main;
 public class ApplicationConfiguration {
 
     public static final String ROOT_DIRECTORY = "./data/";
-    public static String USER_CATALOG_FILENAME = "userCatalog";
-    public static String SPLIT_CATALOG_FILENAME = "splitCatalog";
-    public static String EXPENSES_CATALOG_FILENAME = "expensesCatalog";
+    public static String USER_CATALOG_FILENAME = "userCatalog.dat";
+    public static String SPLIT_CATALOG_FILENAME = "splitCatalog.dat";
+    public static String EXPENSES_CATALOG_FILENAME = "expensesCatalog.dat";
 
-    static String DEFAULT_PROMPT = "EuroSplit";
+    public static String DEFAULT_PROMPT = "EuroSplit";
 
 }

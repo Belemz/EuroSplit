@@ -38,11 +38,18 @@ public class Split {
     public void setEvent(String event) {
         this.event = event;
     }
-
+    
+    public String getEvent() {
+    	return this.event;
+    }
+    
     public User getOwner() {
         return this.owner;
     }
-
+    
+    public List<Expense> getExpenses() {
+    	return this.expenses;
+    }
     public void addExpense(Expense e) {
         this.expenses.add(e);
     }
