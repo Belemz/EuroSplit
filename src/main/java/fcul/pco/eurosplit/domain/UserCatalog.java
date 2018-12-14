@@ -52,13 +52,11 @@ public class UserCatalog {
     }
 
     public ArrayList<User> getUsersWithName(String name) {
-        ArrayList<User> l = new ArrayList<User>();
-        l.addAll(this.users_map.values());
-
-        for (User u : l) {
+    	ArrayList<User> l = new ArrayList<>();
+        for (User u : this.users_map.values()) {
             String[] match = u.getName().split(" ");
-            if (!match[0].equalsIgnoreCase(name)) {
-                l.remove(u);
+            if (match[0].equalsIgnoreCase(name)) {
+                l.add(u);
             }
         }
         return l;
