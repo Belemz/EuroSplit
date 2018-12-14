@@ -28,10 +28,12 @@ public class Split {
         this.owner = owner;
         this.event = event;
         this.expenses = new ArrayList<>();
+
+        System.out.println(id);
     }
 
     public Split(User owner, String events) {
-        this(counter++, owner, events);
+        this(++counter, owner, events);
 
     }
 
@@ -55,7 +57,7 @@ public class Split {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public String toString() {
@@ -66,7 +68,7 @@ public class Split {
         split_string.append(this.event).append("#");
 
         for (Expense expense : this.expenses) {
-            split_string.append(expense.getId()).append("-");
+            split_string.append(expense.getId()).append(":");
         }
 
         return split_string.toString().substring(0, split_string.length() - 1);
@@ -81,12 +83,12 @@ public class Split {
         Split split_object = new Split(Integer.parseInt(split_string[0]), owner, split_string[2]);
 
 
-        for (String id : split_string[3].split("-")) {
+        for (String id : split_string[3].split(":")) {
             Expense expense = Start.getExpenseCatalog().getExpenseById(Integer.parseInt(id));
             split_object.addExpense(expense);
         }
 
-        counter = (split_object.id > counter) ? counter = split_object.id + 1 : counter;
+        counter = (split_object.id > counter) ? (split_object.id) : counter;
 
         return split_object;
 
