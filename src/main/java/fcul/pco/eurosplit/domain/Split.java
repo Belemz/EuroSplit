@@ -28,8 +28,6 @@ public class Split {
         this.owner = owner;
         this.event = event;
         this.expenses = new ArrayList<>();
-
-        System.out.println(id);
     }
 
     public Split(User owner, String events) {

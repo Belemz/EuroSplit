@@ -7,13 +7,13 @@ import java.util.Map;
 
 public class ExpenseCatalog {
 
-    private Map<Integer, Expense> expenses;
+    private Map<Integer, Expense> expenses_map;
 
     private static ExpenseCatalog instance;
 
 
     private ExpenseCatalog() {
-        this.expenses = new HashMap<Integer, Expense>();
+        this.expenses_map = new HashMap<Integer, Expense>();
     }
 
 
@@ -30,7 +30,7 @@ public class ExpenseCatalog {
      * @param exp
      */
     public void addExpense(Expense exp) {
-        this.expenses.put(exp.getId(), exp);
+        this.expenses_map.put(exp.getId(), exp);
     }
 
     /*
@@ -40,7 +40,7 @@ public class ExpenseCatalog {
      */
     public Expense getExpenseById(Integer id) {
         //todo o que fazer quando não existe no dicionário um dado id ?? null (deixo assim)
-        return this.expenses.get(id);
+        return this.expenses_map.get(id);
     }
 
     /*
@@ -48,15 +48,15 @@ public class ExpenseCatalog {
      * @returns boolean
      */
     public boolean hasExpenseWithId(Integer id) {
-        return this.expenses.containsKey(id);
+        return this.expenses_map.containsKey(id);
     }
 
 
     public void save() throws IOException {
-        fcul.pco.eurosplit.persistence.ExpenseCatalog.save(this.expenses);
+        fcul.pco.eurosplit.persistence.ExpenseCatalog.save(this.expenses_map);
     }
 
     public void load() throws FileNotFoundException {
-        this.expenses = fcul.pco.eurosplit.persistence.ExpenseCatalog.load();
+        this.expenses_map = fcul.pco.eurosplit.persistence.ExpenseCatalog.load();
     }
 }

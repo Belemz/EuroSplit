@@ -1,21 +1,14 @@
 package fcul.pco.eurosplit.main;
 
-import fcul.pco.eurosplit.domain.Expense;
-import fcul.pco.eurosplit.domain.Split;
-import fcul.pco.eurosplit.domain.SplitCatalog;
-// TODO: import fcul.pco.eurosplit.domain.Split;
-import fcul.pco.eurosplit.domain.User;
-import fcul.pco.eurosplit.domain.UserCatalog;
-import fcul.pco.eurosplit.domain.Date;
-import fcul.pco.eurosplit.domain.Table;
+import fcul.pco.eurosplit.domain.*;
+
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
+
+// TODO: import fcul.pco.eurosplit.domain.Split;
 
 /**
  *
@@ -185,7 +178,7 @@ public class Interp {
 	        String event = input.nextLine();
 	        Split nSplit = new Split(this.currentUser, event);
 	        this.currentSplit = nSplit;
-	        SplitCatalog.getInstance().addSplit(this.currentUser, this.currentSplit);
+            SplitCatalog.getInstance().addSplit(this.currentSplit);
 		
 		} else {
 			System.out.println("User must be logged in order to proceed.");
@@ -336,9 +329,8 @@ public class Interp {
      * @return
      */
     
-    
     private User selectOrCreateUser(Scanner input, String name) {
-        ArrayList<User> list = Start.getUserCatalog().getUsersWithName(name);
+        List<User> list = Start.getUserCatalog().getUsersWithName(name);
         //TODO: a little addition to handle inputmismatchexception
         Boolean error = false;
         if (list.isEmpty()) {
