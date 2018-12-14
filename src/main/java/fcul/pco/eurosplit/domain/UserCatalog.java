@@ -51,8 +51,8 @@ public class UserCatalog {
         }
     }
 
-    public List<User> getUsersWithName(String name) {
-        List<User> l = new ArrayList<User>();
+    public ArrayList<User> getUsersWithName(String name) {
+        ArrayList<User> l = new ArrayList<User>();
         l.addAll(this.users_map.values());
 
         for (User u : l) {

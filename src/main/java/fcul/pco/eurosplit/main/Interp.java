@@ -1,20 +1,22 @@
 package fcul.pco.eurosplit.main;
 
-import fcul.pco.eurosplit.domain.*;
-
+import fcul.pco.eurosplit.domain.Expense;
+import fcul.pco.eurosplit.domain.Split;
+import fcul.pco.eurosplit.domain.SplitCatalog;
+import fcul.pco.eurosplit.domain.User;
+import fcul.pco.eurosplit.domain.UserCatalog;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
-// TODO: import fcul.pco.eurosplit.domain.Split;
-
 /**
  *
  * @author tl
  */
-public class Interp {
+public class Interp extends Start {
 
     /**
      * Contains the string that is correspond to interpreter's prompt. It is
@@ -48,9 +50,10 @@ public class Interp {
      *
      * @param command
      * @param input
+     * @throws IOException 
      */
     // TODO: Tem de se corrigir e testar "makeNewExpense" "printBalance" e "makeNewExpense"
-    public void execute(String command, Scanner input) {
+    public void execute(String command, Scanner input) throws IOException {
         switch (command) {
             case "help":
                 help();
@@ -94,6 +97,7 @@ public class Interp {
         System.out.println("balance: print the balance of the current split.");
         System.out.println("login: log a user in.");
         System.out.println("quit: terminate the program.");
+        System.out.println("reset: deletes current catalogs");
     }
     
     private void makeNewUser(Scanner input) {
@@ -102,12 +106,16 @@ public class Interp {
        System.out.print("Email address: ");
        String nEmail = input.nextLine();
        
-       User nUser = new User(nName, nEmail);
-       this.currentUser = nUser;
-       // TODO: this.setPrompt();
+       if(Start.getUserCatalog().hasUserWithId(nEmail)) {
+    	   System.out.println("A user with this email address already exists.");
+       } else {
+    	   User nUser = new User(nName, nEmail);
+           this.currentUser = nUser;
+           //adds a User instance to Start class UserCatalog instance.
+           Start.getUserCatalog().addUser(nUser);
+           this.setPrompt();
+       }
        
-       //adds a User instance to Start class UserCatalog instance.
-       Start.getUserCatalog().addUser(nUser);
     }
 
     // @overload
@@ -115,12 +123,16 @@ public class Interp {
         System.out.print("Email address: ");
         String nEmail = input.nextLine();
         
-        User nUser = new User(nName, nEmail);
-        this.currentUser = nUser;
-        // TODO: this.setPrompt();
-        
-        //adds a User instance to Start class UserCatalog instance.
-        Start.getUserCatalog().addUser(nUser);
+        if(Start.getUserCatalog().hasUserWithId(nEmail)) {
+     	   System.out.println("A user with this email address already exists.");
+        } else {
+     	   User nUser = new User(nName, nEmail);
+            this.currentUser = nUser;
+            
+            //adds a User instance to Start class UserCatalog instance.
+            Start.getUserCatalog().addUser(nUser);
+            this.setPrompt();
+        }
 
     };
     /*
@@ -145,19 +157,27 @@ public class Interp {
     private void login(Scanner input) {
         System.out.print("Username: ");
         String username = input.nextLine();
+        User selUser;
+        Boolean notLoggedIn;
         //verifies if user exists in Start.userCatalog
-        this.selectOrCreateUser(input, username);
+        selUser = this.selectOrCreateUser(input, username);
         
-        System.out.print("Email: ");
-        String email = input.nextLine();
-        //verifies if email corresponds to user in Start.userCatalog
-        if(Start.getUserCatalog().hasUserWithId(email)) {
-        	this.currentUser = Start.getUserCatalog().getUserById(email);
-        } else {
-        	System.out.println("Email doesn't match.");
-        	return;
-        };
+        try {
+        	notLoggedIn = !selUser.getName().equals(this.currentUser.getName());
+        	} catch (NullPointerException e) {notLoggedIn = true;}
         
+        if(notLoggedIn) {
+        	//to avoid asking again for email when failed login name
+        	System.out.print("Email: ");
+            String email = input.nextLine();
+            //verifies if email corresponds to user in Start.userCatalog
+            if(Start.getUserCatalog().hasUserWithId(email)) {
+            	this.currentUser = Start.getUserCatalog().getUserById(email);
+            } else {
+            	System.out.println("Email doesn't match.");
+            	return;
+            };
+        } else {System.out.println("User already logged in.");}
         
         
         this.setPrompt();
@@ -174,11 +194,11 @@ public class Interp {
 	private void makeNewSplit(Scanner input) {
 	 
 		if(this.currentUser != null) {
-	    	System.out.println("For what event is this split ? (i.e. ï¿½trip to Madridï¿½, ï¿½house expensesï¿½, etc...)");
+	    	System.out.println("For what event is this split ? (i.e. «trip to Madrid», «house expenses», etc...)");
 	        String event = input.nextLine();
 	        Split nSplit = new Split(this.currentUser, event);
 	        this.currentSplit = nSplit;
-            SplitCatalog.getInstance().addSplit(this.currentSplit);
+	        SplitCatalog.getInstance().addSplit(this.currentSplit);
 		
 		} else {
 			System.out.println("User must be logged in order to proceed.");
@@ -197,7 +217,7 @@ public class Interp {
         	System.out.println("Select a split number:");
         	input.nextLine();
         }
-    	// TODO: ainda ï¿½ preciso corrigir este 
+    	// TODO: ainda é preciso corrigir este 
     }
 
     private void printBalance() {
@@ -205,7 +225,7 @@ public class Interp {
     	int debitAmmount;
     	int debitAmmountRemainder;
     	int userBalanceUpdate;
-    	// TODO: Ainda tem de ser adicionar um mï¿½todo aleatï¿½rio 
+    	// TODO: Ainda tem de ser adicionar um método aleatório 
     	// para dividir o resto por pessoas.
     	Random generator =  new Random();
     	UserCatalog user = Start.getUserCatalog();
@@ -214,9 +234,9 @@ public class Interp {
     		numberPaidFor = nextExp.getPaidFor().size();
     		debitAmmount = Math.floorDiv(nextExp.getValue(), numberPaidFor);
     		debitAmmountRemainder = Math.floorMod(nextExp.getValue(), numberPaidFor);
-    		//de modo a conseguir criar uma lista dos balanï¿½os dos intervenientes
-    		//criei um map com keys user e int(saldo). Intervenientes vï¿½o sendo adicionados
-    		//com saldo 0 se ainda nï¿½o tiverem sido adicionados.
+    		//de modo a conseguir criar uma lista dos balanços dos intervenientes
+    		//criei um map com keys user e int(saldo). Intervenientes vão sendo adicionados
+    		//com saldo 0 se ainda não tiverem sido adicionados.
     		for(User paidFor : nextExp.getPaidFor()) {
         		userBalance.putIfAbsent(paidFor, 0);
         		userBalanceUpdate = userBalance.get(paidFor) - debitAmmount;
@@ -224,7 +244,7 @@ public class Interp {
         	}
     		
     		
-    		//agora adiciona-se o user pago (se nï¿½o tiver aparecido antes) 
+    		//agora adiciona-se o user pago (se não tiver aparecido antes) 
     		//e incrementa-se o devido valor.
     		userBalance.putIfAbsent(nextExp.getUser(), 0);
     		userBalanceUpdate = (nextExp.getValue() - debitAmmount) + userBalance.get(nextExp.getUser());
@@ -274,7 +294,7 @@ public class Interp {
         String paidFor;
         User whichUser;
         do {
-	        System.out.print("Who did you pay for: (ï¿½no oneï¿½ to terminate");
+	        System.out.print("Who did you pay for: («no one» to terminate");
 	        paidFor = input.nextLine();
 	        whichUser = this.selectUser(input, paidFor);
 	        nExpense.addPaidFor(whichUser);
@@ -329,18 +349,20 @@ public class Interp {
      * @return
      */
     
+    
     private User selectOrCreateUser(Scanner input, String name) {
-        List<User> list = Start.getUserCatalog().getUsersWithName(name);
+        ArrayList<User> list = Start.getUserCatalog().getUsersWithName(name);
         //TODO: a little addition to handle inputmismatchexception
         Boolean error = false;
         if (list.isEmpty()) {
             System.out.println("There is no registred user with name " + name + ".");
             if (askYNQuestion(input, "Do you want to create user " + name)) {
-                User theUser = currentUser;
+                //TODO: commented lines bellow necessary?
+            	//User theUser = currentUser;
                 makeNewUser(input, name);
                 User newUser = currentUser;
-                currentUser = theUser;
-                //TODO: setPrompt();
+                //currentUser = theUser;
+                setPrompt();
                 return newUser;
             } else {
                 // ask again:
@@ -362,7 +384,7 @@ public class Interp {
             	error = false;
 	            try {
 	            	i = Integer.valueOf(input.nextLine());
-	            	//de forma a apanhar a excepï¿½ï¿½o.
+	            	//de forma a apanhar a excepção.
 	            	list.get(i);
 	            } catch (IndexOutOfBoundsException e1) {
 	            	System.out.println("Use an int within choice range...");
@@ -380,6 +402,7 @@ public class Interp {
     private User selectUser(Scanner input, String name) {
     	List<User> list = Start.getUserCatalog().getUsersWithName(name);
     	if (list.size() == 1) return list.get(0);
+    	
     	int k;
     	if (!list.isEmpty()) {
 	    	for (int i=0; i < list.size(); i++) {
