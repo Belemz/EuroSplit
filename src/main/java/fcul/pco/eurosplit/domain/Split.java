@@ -10,7 +10,7 @@ import fcul.pco.eurosplit.main.Start;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Split implements Comparable {
+public class Split {
 
     private int id;
 
@@ -87,13 +87,4 @@ public class Split implements Comparable {
 
     }
 
-    @Override
-    public int compareTo(Object o) {
-        Split other = null;
-        if (o instanceof Split) {
-            other = (Split) o;
-        }
-
-        return Integer.compare(this.getId(), other.getId());
-    }
 }
