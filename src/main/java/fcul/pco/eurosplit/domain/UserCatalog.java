@@ -114,26 +114,19 @@ public class UserCatalog {
      */
     public String getAllUsers() {
         ArrayList<User> l = new ArrayList<User>();
-        ArrayList<List<String>> tab = new ArrayList<List<String>>();
-        ArrayList<String> tabentry = new ArrayList<String>();
 
         l.addAll(this.users_map.values());
         Collections.sort(l);
-        
+
+        ArrayList<List<String>> tab = new ArrayList<List<String>>();
         for (User u : l) {
+            ArrayList<String> tabentry = new ArrayList<String>();
             tabentry.add(u.getName());
             tabentry.add(u.getEmail());
 
             tab.add(tabentry);
         }
-        
-        //to avoid indexOutOfBounds
-        if(l.isEmpty()) {
-        	tabentry.add("null");
-        	tabentry.add("null");
-        	
-        	tab.add(tabentry);
-        }
+
         return Table.tableToString(tab);
     }
 
