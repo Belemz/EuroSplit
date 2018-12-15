@@ -18,24 +18,29 @@ import static fcul.pco.eurosplit.main.ApplicationConfiguration.SPLIT_CATALOG_FIL
 
 public class SplitCatalog {
 
-    public static void save(Map<User, List<Split>> splits) throws IOException {
+	public static void save(Map<User, List<Split>> splits) throws IOException {
 
         try (BufferedWriter file_write = new BufferedWriter(new FileWriter(ROOT_DIRECTORY + SPLIT_CATALOG_FILENAME))) {
             System.out.println(splits.keySet());
 
             for (List<Split> user_split_list : splits.values()) {
-
+            	int split_counter = 0;
                 for (Split split : user_split_list) {
-                    file_write.write(split.toString() + ",");   // TODO : REMOVER A ÚLTIMA , DO FICHEIRO
+                    split_counter ++;
+                    if(split_counter < user_split_list.size()) {
+                    	file_write.write(split.toString() + ",");
+                    } else {
+                    	file_write.write(split.toString());
+                    }
                 }
-
+				
                 file_write.write("\n");
 
             }
 
         }
     }
-
+	
     public static Map<User, List<Split>> load() throws FileNotFoundException {
 
         Map<User, List<Split>> map_splits = new HashMap<User, List<Split>>();
