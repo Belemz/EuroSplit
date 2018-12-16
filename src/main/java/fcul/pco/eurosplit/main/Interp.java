@@ -3,14 +3,19 @@ package fcul.pco.eurosplit.main;
 import fcul.pco.eurosplit.domain.Expense;
 import fcul.pco.eurosplit.domain.Split;
 import fcul.pco.eurosplit.domain.SplitCatalog;
+import fcul.pco.eurosplit.domain.Table;
 import fcul.pco.eurosplit.domain.User;
 import fcul.pco.eurosplit.domain.UserCatalog;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 /**
  *
@@ -181,7 +186,7 @@ public class Interp extends Start {
         
         
         this.setPrompt();
-    }
+    }    
     
     /*
      * Replaces this.currentSplit with nSplit, with logged in user as owner and event set by request.
@@ -192,65 +197,110 @@ public class Interp extends Start {
     
     
 	private void makeNewSplit(Scanner input) {
-	 
-		if(this.currentUser != null) {
-	    	System.out.println("For what event is this split ? (i.e. «trip to Madrid», «house expenses», etc...)");
-	        String event = input.nextLine();
-	        Split nSplit = new Split(this.currentUser, event);
-	        this.currentSplit = nSplit;
-	        SplitCatalog.getInstance().addSplit(this.currentSplit);
+		if(secure_procedure(0)) return;
 		
-		} else {
-			System.out.println("User must be logged in order to proceed.");
-		}
+		System.out.println("For what event is this split ? (i.e. Â«trip to MadridÂ», Â«house expensesÂ», etc...)");
+		String event = input.nextLine();
+		Split nSplit = new Split(this.currentUser, event);
+		this.currentSplit = nSplit;
+		this.setPrompt();
+		SplitCatalog.getInstance().addSplit(this.currentSplit);
+		
+		
 	}
     
     
     private void selectSplit(Scanner input) {
-        if(this.currentUser != null) {
-        	
-        	System.out.print("Name of split's owner ?");
-        	String splitowner = input.nextLine();
-        	
-        	// TODO
-        	
-        	System.out.println("Select a split number:");
-        	input.nextLine();
-        }
-    	// TODO: ainda é preciso corrigir este 
+    	if(this.secure_procedure(0)) return;
+		
+		System.out.print("Name of split's owner ?");
+		String splitowner = input.nextLine();
+		
+		List<Split> allSplits = Start.getSplitCatalog().getUserSplits(this.selectUser(input, splitowner));
+		if(allSplits == null) {
+			System.out.println("No splits assigned to user.");
+			return;
+		}
+		
+		for(int i = 0; i < allSplits.size(); i++){
+			System.out.println(i + " " + allSplits.get(i).getEvent());
+		};
+		System.out.println("Select a split number:");
+		
+		this.currentSplit = allSplits.get(Integer.parseInt(input.nextLine()));
+		this.setPrompt();
     }
 
     private void printBalance() {
+    	if(this.secure_procedure(1)) return;
+        
     	int numberPaidFor;
     	int debitAmmount;
     	int debitAmmountRemainder;
     	int userBalanceUpdate;
-    	// TODO: Ainda tem de ser adicionar um método aleatório 
+    	
+    	// TODO: Ainda tem de ser adicionar um mÃ©todo aleatÃ³rio 
     	// para dividir o resto por pessoas.
-    	Random generator =  new Random();
-    	UserCatalog user = Start.getUserCatalog();
-    	Map<User, Integer> userBalance = null;
+    	HashMap<User, Integer> userBalance = new HashMap<>();
     	for(Expense nextExp : this.currentSplit.getExpenses()) {
+    		//this adds the creator of the expense.
+        	userBalance.putIfAbsent(nextExp.getUser(), 0);
+        	
     		numberPaidFor = nextExp.getPaidFor().size();
     		debitAmmount = Math.floorDiv(nextExp.getValue(), numberPaidFor);
     		debitAmmountRemainder = Math.floorMod(nextExp.getValue(), numberPaidFor);
-    		//de modo a conseguir criar uma lista dos balanços dos intervenientes
-    		//criei um map com keys user e int(saldo). Intervenientes vão sendo adicionados
-    		//com saldo 0 se ainda não tiverem sido adicionados.
+    		//de modo a conseguir criar uma lista dos balanÃ§os dos intervenientes
+    		//criei um map com keys user e int(saldo). Intervenientes vÃ£o sendo adicionados
+    		//com saldo 0 se ainda nÃ£o tiverem sido adicionados.
     		for(User paidFor : nextExp.getPaidFor()) {
         		userBalance.putIfAbsent(paidFor, 0);
         		userBalanceUpdate = userBalance.get(paidFor) - debitAmmount;
-        		userBalance.put(paidFor, userBalanceUpdate);
+        		userBalance.replace(paidFor, userBalanceUpdate);
         	}
     		
+    		//super simplified code to share the remainder of the expense.
+    		ArrayList<User> userList = new ArrayList<User>();
+    		userList.addAll(nextExp.getPaidFor());
+    		for(int i = 0; i <= 1; i++) {
+	    		//to prevent issues when list gets reduced to size == 1
+    			if(userList.size() != 1) {
+	    			int randomNum = ThreadLocalRandom.current().nextInt(0, userList.size() - 1);
+		    		User randomPick = userList.get(randomNum);
+		    		userBalanceUpdate = userBalance.get(randomPick) - debitAmmountRemainder;
+	        		userBalance.replace(randomPick, userBalanceUpdate);
+	        		userList.remove(randomPick);
+	    		} else {
+	    			User floorPick = userList.get(0);
+		    		userBalanceUpdate = userBalance.get(floorPick) - debitAmmountRemainder;
+	        		userBalance.replace(floorPick, userBalanceUpdate);
+	    		}
+    			
+    		}
     		
-    		//agora adiciona-se o user pago (se não tiver aparecido antes) 
+    		//agora adiciona-se o user pago (se nÃ£o tiver aparecido antes) 
     		//e incrementa-se o devido valor.
-    		userBalance.putIfAbsent(nextExp.getUser(), 0);
-    		userBalanceUpdate = (nextExp.getValue() - debitAmmount) + userBalance.get(nextExp.getUser());
-    		userBalance.put(nextExp.getUser(), userBalanceUpdate);
+    		System.out.println(userBalance.get(nextExp.getUser()));
+    		userBalanceUpdate = (nextExp.getValue()) + userBalance.get(nextExp.getUser());
+    		userBalance.replace(nextExp.getUser(), userBalanceUpdate);
         }
-    	// TODO
+    	
+    	ArrayList<List<String>> tab = new ArrayList<List<String>>();
+    	
+    	for(User u : userBalance.keySet()) {
+    		ArrayList<String> tabentry = new ArrayList<>();
+    		
+    		tabentry.add(u.getName());
+    		tabentry.add(userBalance.get(u).toString());
+    		
+    		
+    		tab.add(tabentry);
+    	}
+        
+        try{
+        	System.out.println(Table.tableToString(tab));
+        } catch(IndexOutOfBoundsException e) {
+        	System.out.println("No expenses found.");
+        }
     }
 
     private void save() {
@@ -266,7 +316,12 @@ public class Interp extends Start {
         } catch (IOException ex) {
             System.err.println("Error saving Expense Catalog.");
         }
-        // TODO
+        try {
+        	System.out.println("Saving Split Catalog...");
+            Start.getSplitCatalog().save();
+        } catch (IOException ex) {
+            System.err.println("Error saving Split Catalog.");
+        }
     }
     
     /*
@@ -276,29 +331,34 @@ public class Interp extends Start {
     
     
     private void makeNewExpense(Scanner input) {
-        try {
-        	this.currentUser.equals(null);
-        	} catch (NullPointerException e) {
-        		System.out.println("You must be logged in to proceed.");
-            	return;
-        	}
-        
-    	System.out.print("Expense made by you (" + this.currentUser.toString() + "). What did you pay for ?");
+        if(this.secure_procedure(1)) return;       
+    	
+        System.out.print("Expense made by you (" + this.currentUser.getName() + "). What did you pay for ?");
         String theItem = input.nextLine();
         
         System.out.print("How much did you pay? ");
-        int theValue = input.nextInt();
+        
+        int theValue = Integer.parseInt(input.nextLine());
         
         Expense nExpense = new Expense(theItem, theValue, currentUser);
     	
         String paidFor;
         User whichUser;
-        do {
-	        System.out.print("Who did you pay for: («no one» to terminate");
+        //breaks out of loop when no one is prompted
+        while(true) {
+	        System.out.print("Who did you pay for: (Â«no oneÂ» to terminate)");
 	        paidFor = input.nextLine();
+	        //if constraints are not employed printBalance will try to divide by 0.
+			if(paidFor.equalsIgnoreCase("no one")) {
+				if(nExpense.getPaidFor().size() == 0){
+					System.out.println("Add at least one participating user for the Expense.");
+					continue;
+				} else break;
+			}
+
 	        whichUser = this.selectUser(input, paidFor);
 	        nExpense.addPaidFor(whichUser);
-        } while(!paidFor.equalsIgnoreCase("no one"));
+        }
         this.currentSplit.addExpense(nExpense);
         
         Start.getExpenseCatalog().addExpense(nExpense);
@@ -384,7 +444,7 @@ public class Interp extends Start {
             	error = false;
 	            try {
 	            	i = Integer.valueOf(input.nextLine());
-	            	//de forma a apanhar a excepção.
+	            	//de forma a apanhar a excepï¿½ï¿½o.
 	            	list.get(i);
 	            } catch (IndexOutOfBoundsException e1) {
 	            	System.out.println("Use an int within choice range...");
@@ -428,6 +488,37 @@ public class Interp extends Start {
             answer = input.nextLine();
         }
         return answer.equalsIgnoreCase("Y");
+    }
+    
+    /*
+     * Use for assuring session has valid instances of either user or split.
+     * @ param gate //gate = 0 for verifying user login, or gate = 1 for user and split selection.
+     */
+    private boolean secure_procedure(int gate) {
+    	if (gate == 1) {
+	    	try {
+	        	this.currentUser.equals(null);	
+	        } catch (NullPointerException e) {
+	    		System.out.println("You must be logged in to proceed.");
+	        	return true;
+	    	}
+	        try {
+	        	this.currentSplit.equals(null);	
+	        } catch (NullPointerException e) {
+	    		System.out.println("Select a split to proceed.");
+	        	return true;
+	    	}
+    	} else {
+    		try {
+	        	this.currentUser.equals(null);	
+	        } catch (NullPointerException e) {
+	    		System.out.println("You must be logged in to proceed.");
+	        	return true;
+	    	}
+    	}
+    	
+    	return false;
+    	
     }
 
 }

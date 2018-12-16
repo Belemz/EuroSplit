@@ -76,11 +76,17 @@ public class Start {
         f.delete();
         f.createNewFile();
     }
+    
+    
 
     // o run não pode ter throws. faz catch dentro do método (à volta do delete) ou dentro do próprio método delete!
     // Não faz sentido fazer throws no main! Isso dá uma exceção sem dar erro. Ou faz catch no main ou antes.
-    private static void run() throws IOException {
-        deleteCatalogs();
+    private static void run() {
+        try {
+			deleteCatalogs();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         Scanner input = new Scanner(System.in);
         initialize();
         Interp interp = new Interp(input);
@@ -90,19 +96,18 @@ public class Start {
 
         do {
             command = interp.nextToken();
-            interp.execute(command, input);
+            try {
+				interp.execute(command, input);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
         } while (!command.equals("quit"));
 
 
     }
 
-    public static void main(String[] args) {
-        //TODO Confirmar posição do try
-        try {
-            run();
-        } catch (IOException e) {
-            System.err.println("The file was not found.");
-        }
+    public static void main(String[] args) throws IOException {
+        run();
 
 /*
         User user1 = new User("albino", "albino@hotmail.com");

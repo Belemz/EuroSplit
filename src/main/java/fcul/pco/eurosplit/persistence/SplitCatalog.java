@@ -18,7 +18,7 @@ import static fcul.pco.eurosplit.main.ApplicationConfiguration.SPLIT_CATALOG_FIL
 
 public class SplitCatalog {
 
-	public static void save(Map<User, List<Split>> splits) throws IOException {
+    public static void save(Map<User, List<Split>> splits) throws IOException {
 
         try (BufferedWriter file_write = new BufferedWriter(new FileWriter(ROOT_DIRECTORY + SPLIT_CATALOG_FILENAME))) {
             System.out.println(splits.keySet());
@@ -40,7 +40,7 @@ public class SplitCatalog {
 
         }
     }
-	
+
     public static Map<User, List<Split>> load() throws FileNotFoundException {
 
         Map<User, List<Split>> map_splits = new HashMap<User, List<Split>>();
