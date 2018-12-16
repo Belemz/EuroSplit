@@ -21,7 +21,6 @@ public class SplitCatalog {
     public static void save(Map<User, List<Split>> splits) throws IOException {
 
         try (BufferedWriter file_write = new BufferedWriter(new FileWriter(ROOT_DIRECTORY + SPLIT_CATALOG_FILENAME))) {
-            System.out.println(splits.keySet());
 
             for (List<Split> user_split_list : splits.values()) {
             	int split_counter = 0;
