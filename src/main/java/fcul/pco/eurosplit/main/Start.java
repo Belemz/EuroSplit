@@ -30,28 +30,40 @@ public class Start {
         return splitCatalog;
     }
 
-    public static void initialize() {
+    public static void initialize() throws IOException {
         userCatalog = UserCatalog.getInstance();
+        
         try {
             userCatalog.load();
         } catch (FileNotFoundException e) {
-            System.err.println("The user catalog file was not found.");
+            System.err.println("The user catalog file was not found. \nCreating a new one.");
+        	File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
+                    + "/"
+                    + ApplicationConfiguration.USER_CATALOG_FILENAME);
+            f.createNewFile();
         }
 
-
+        
         expenseCatalog = ExpenseCatalog.getInstance();
         try {
             expenseCatalog.load();
         } catch (FileNotFoundException e) {
-            System.err.println("The expense catalog file was not found.");
+        	System.err.println("The user expense catalog file was not found. \nCreating a new one.");
+        	File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
+                    + "/"
+                    + ApplicationConfiguration.EXPENSES_CATALOG_FILENAME);
+            f.createNewFile();
         }
 
         splitCatalog = SplitCatalog.getInstance();
         try {
             splitCatalog.load();
         } catch (FileNotFoundException e) {
-            System.err.println("The split catalog file was not found.");
-        }
+        	System.err.println("The split catalog file was not found. \nCreating a new one.");
+        	File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
+                    + "/"
+                    + ApplicationConfiguration.SPLIT_CATALOG_FILENAME);
+            f.createNewFile();        }
 
     }
 
@@ -82,13 +94,21 @@ public class Start {
     // o run não pode ter throws. faz catch dentro do método (à volta do delete) ou dentro do próprio método delete!
     // Não faz sentido fazer throws no main! Isso dá uma exceção sem dar erro. Ou faz catch no main ou antes.
     private static void run() {
-        try {
+    	try {
 			deleteCatalogs();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+    	
         Scanner input = new Scanner(System.in);
-        initialize();
+        
+        try {
+			initialize();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
         Interp interp = new Interp(input);
         String command = "";
 
@@ -108,74 +128,6 @@ public class Start {
 
     public static void main(String[] args) throws IOException {
         run();
-
-/*
-        User user1 = new User("albino", "albino@hotmail.com");
-        User user2 = new User("josefino", "josefino@netcabo.pt");
-        User user3 = new User("carlino", "carlino@gmail.com");
-
-        userCatalog.addUser(user1);
-        userCatalog.addUser(user2);
-        userCatalog.addUser(user3);
-
-
-
-
-        Expense expense1 = new Expense("avião", 30, user1);
-        Expense expense2 = new Expense("Bowling", 16, user3);
-        Expense expense3 = new Expense("pipocas", 5, user2);
-
-
-        expense1.addPaidFor(user3);
-        expense1.addPaidFor(user2);
-        expense2.addPaidFor(user1);
-
-
-        expense3.addPaidFor(user1);
-        expense3.addPaidFor(user2);
-
-        expenseCatalog.addExpense(expense1);
-        expenseCatalog.addExpense(expense2);
-        expenseCatalog.addExpense(expense3);
-
-
-        Split split1 = new Split(user1, "viagem a Madrid");
-        Split split2 = new Split(user1, "aniversário");
-        Split split3 = new Split(user2, "cinema");
-
-        split1.addExpense(expense1);
-        split1.addExpense(expense2);
-
-        split2.addExpense(expense2);
-
-        split3.addExpense(expense3);
-
-        splitCatalog.addSplit(split1);
-        splitCatalog.addSplit(split2);
-        splitCatalog.addSplit(split3);
-
-
-        try {
-            userCatalog.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        try {
-            expenseCatalog.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-        try {
-            splitCatalog.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
 
     }
 }

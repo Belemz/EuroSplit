@@ -169,7 +169,9 @@ public class Interp extends Start {
         
         try {
         	notLoggedIn = !selUser.getName().equals(this.currentUser.getName());
-        	} catch (NullPointerException e) {notLoggedIn = true;}
+        	} catch (NullPointerException e) {
+        		notLoggedIn = true;
+        		}
         
         if(notLoggedIn) {
         	//to avoid asking again for email when failed login name
@@ -299,7 +301,7 @@ public class Interp extends Start {
         try{
         	System.out.println(Table.tableToString(tab));
         } catch(IndexOutOfBoundsException e) {
-        	System.out.println("No expenses found.");
+        	System.err.println("No expenses found.");
         }
     }
 
@@ -447,10 +449,10 @@ public class Interp extends Start {
 	            	//de forma a apanhar a excep��o.
 	            	list.get(i);
 	            } catch (IndexOutOfBoundsException e1) {
-	            	System.out.println("Use an int within choice range...");
+	            	System.err.println("Use an int within choice range...");
 	            	error = true;
 	            } catch (Exception e2) {
-	            	System.out.println("Please use an int...");
+	            	System.err.println("Please use an int...");
 	            	error = true;
 	            }
             } while(error);
@@ -499,20 +501,20 @@ public class Interp extends Start {
 	    	try {
 	        	this.currentUser.equals(null);	
 	        } catch (NullPointerException e) {
-	    		System.out.println("You must be logged in to proceed.");
+	    		System.err.println("You must be logged in to proceed.");
 	        	return true;
 	    	}
 	        try {
 	        	this.currentSplit.equals(null);	
 	        } catch (NullPointerException e) {
-	    		System.out.println("Select a split to proceed.");
+	    		System.err.println("Select a split to proceed.");
 	        	return true;
 	    	}
     	} else {
     		try {
 	        	this.currentUser.equals(null);	
 	        } catch (NullPointerException e) {
-	    		System.out.println("You must be logged in to proceed.");
+	    		System.err.println("You must be logged in to proceed.");
 	        	return true;
 	    	}
     	}
