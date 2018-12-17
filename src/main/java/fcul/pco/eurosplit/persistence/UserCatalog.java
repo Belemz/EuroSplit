@@ -1,10 +1,5 @@
 package fcul.pco.eurosplit.persistence;
 
-/**
- * This class ensures the proper management of saving and loading operations.
- * @author Fábio Neves
- * @author Cláudia Belém
- */
 
 
 import fcul.pco.eurosplit.domain.User;
@@ -17,14 +12,20 @@ import java.util.Scanner;
 import static fcul.pco.eurosplit.main.ApplicationConfiguration.ROOT_DIRECTORY;
 import static fcul.pco.eurosplit.main.ApplicationConfiguration.USER_CATALOG_FILENAME;
 
+/**
+ * This class ensures the proper management of saving and loading operations.
+ *
+ * @author Fábio Neves
+ * @author Cláudia Belém
+ */
 
 public class UserCatalog {
 
-	/**
-	 * Saves the UserCatalog instance to the specified path in fcul.pco.main.ApplicationConfiguration.
-	 * @param users
-	 * @throws IOException
-	 */
+    /**
+     * Saves the UserCatalog instance to the specified path in fcul.pco.main.ApplicationConfiguration.
+     * @param users
+     * @throws IOException
+     */
     public static void save(Map<String, User> users) throws IOException {
 
         try (BufferedWriter fw = new BufferedWriter(new FileWriter(ROOT_DIRECTORY + USER_CATALOG_FILENAME))) {

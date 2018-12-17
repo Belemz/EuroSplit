@@ -1,12 +1,13 @@
 package fcul.pco.eurosplit.domain;
+
+import java.io.IOException;
+import java.util.*;
+
 /**
  * @author Cláudia Belém
  * @author Fábio Neves
  * UserCatalog stores instances of type User in a HashMap fashion.
  */
-
-import java.io.IOException;
-import java.util.*;
 
 public class UserCatalog {
 
@@ -34,24 +35,23 @@ public class UserCatalog {
         return instance;
     }
 
-
     /**
      * Stores user instance to UserCatalog.
-     * @param User
+     * @param u is User
      */
     public void addUser(User u) {
         this.users_map.put(u.getEmail(), u);
     }
 
     /**
-     * Returns User instance from UserCatalog according to key.
-     * @param String
+     * Returns User instance from UserCatalog according to email.
+     * @param email is String
      * @return User
      */
-    public User getUserById(String key) {
-        // return this.users_map.getOrDefault(key, null);
-        if (this.users_map.containsKey(key)) {
-            return this.users_map.get(key);
+    public User getUserById(String email) {
+        // return this.users_map.getOrDefault(email, null);
+        if (this.users_map.containsKey(email)) {
+            return this.users_map.get(email);
         } else {
             return null;
         }
@@ -59,14 +59,13 @@ public class UserCatalog {
 
     /**
      * Returns an list containing user instances with names according to name.
-     * @param name
+     * @param name is String
      * @return ArrayList<User>
      */
     public ArrayList<User> getUsersWithName(String name) {
     	ArrayList<User> l = new ArrayList<>();
         for (User u : this.users_map.values()) {
-            String[] match = u.getName().split(" ");
-            if (match[0].equalsIgnoreCase(name)) {
+            if (name.equalsIgnoreCase(u.getName())) {
                 l.add(u);
             }
         }
@@ -84,7 +83,7 @@ public class UserCatalog {
     /**
      * Searches for a User according to his name.
      * Non-sensitive to case.
-     * @param String
+     * @param name
      * @return boolean
      */
     public boolean hasUserWithName(String name) {
@@ -118,30 +117,30 @@ public class UserCatalog {
     }
 
     /**
-     * !!!A variável que é alimentada ao método Table.tableToString
-     * foi alterada para ArrayList<List<String>> para ser
-     * compatível.!!!
+     *
      * Returns the all the values within map sorted.
      * @return ArrayList<User>
-     * @throws IndexOutOfBoundsException
      */
     public String getAllUsers() {
-        ArrayList<User> l = new ArrayList<User>();
-        ArrayList<List<String>> tab = new ArrayList<List<String>>();
+        // The variable that is fed to the Table.tableToString
+        //  was changed to ArrayList <List <String >> for compatibility purposes.
+        List<User> userList = new ArrayList<User>();
+        List<List<String>> table = new ArrayList<List<String>>();
 
-        l.addAll(this.users_map.values());
-        Collections.sort(l);
-        
-        for (User u : l) {
-        	ArrayList<String> tabentry = new ArrayList<String>();
-            tabentry.add(u.getName());
-            tabentry.add(u.getEmail());
+        userList.addAll(this.users_map.values());
+        Collections.sort(userList);
 
-            tab.add(tabentry);
+
+        for (User u : userList) {
+            ArrayList<String> tableLine = new ArrayList<String>();
+            tableLine.add(u.getName());
+            tableLine.add(u.getEmail());
+
+            table.add(tableLine);
         }
         
         try{
-        	return Table.tableToString(tab);	
+            return Table.tableToString(table);
         } catch(IndexOutOfBoundsException e) {
         	return new String("No users added.");
         }

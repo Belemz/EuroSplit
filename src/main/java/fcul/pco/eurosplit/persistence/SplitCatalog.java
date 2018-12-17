@@ -1,11 +1,5 @@
 package fcul.pco.eurosplit.persistence;
 
-/**
- * This class ensures proper loading and saving of SplitCatalog instances.
- * @author Cláudia Belém
- * @author Fábio Neves
- */
-
 
 import fcul.pco.eurosplit.domain.Split;
 import fcul.pco.eurosplit.domain.User;
@@ -17,35 +11,42 @@ import static fcul.pco.eurosplit.main.ApplicationConfiguration.ROOT_DIRECTORY;
 import static fcul.pco.eurosplit.main.ApplicationConfiguration.SPLIT_CATALOG_FILENAME;
 
 
+/**
+ * This class ensures proper loading and saving of SplitCatalog instances.
+ *
+ * @author Cláudia Belém
+ * @author Fábio Neves
+ */
+
 public class SplitCatalog {
-	
-	/**
-	 * Saves the SplitCatalog instance to the specified path in fcul.pco.main.ApplicationConfiguration.
-	 * @param splits
-	 * @throws IOException
-	 */
+
+    /**
+     * Saves the SplitCatalog instance to the specified path in fcul.pco.main.ApplicationConfiguration.
+     * @param splits
+     * @throws IOException
+     */
     public static void save(Map<User, List<Split>> splits) throws IOException {
 
         try (BufferedWriter file_write = new BufferedWriter(new FileWriter(ROOT_DIRECTORY + SPLIT_CATALOG_FILENAME))) {
 
             for (List<Split> user_split_list : splits.values()) {
-            	int split_counter = 0;
+                int split_counter = 0;
                 for (Split split : user_split_list) {
                     split_counter ++;
                     if(split_counter < user_split_list.size()) {
-                    	file_write.write(split.toString() + ",");
+                        file_write.write(split.toString() + ",");
                     } else {
-                    	file_write.write(split.toString());
+                        file_write.write(split.toString());
                     }
                 }
-				
+
                 file_write.write("\n");
 
             }
 
         }
     }
-    
+
     /**
      * Loads the SplitCatalog stored in the specified path in fcul.pco.main.ApplicationConfiguration into the specified instance.
      * @return Map<User, List<Split>>

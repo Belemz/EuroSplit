@@ -1,11 +1,14 @@
 package fcul.pco.eurosplit.domain;
- /** @author Fábio Neves 
-  *  @author Cláudia Belém
-  * This class defines Date instances.
-  */
- 
+
 
 import java.time.LocalDateTime;
+
+/**
+ * @author Cláudia Belém
+ * @author Fábio Neves
+ * <p>
+ * This class defines Date instances.
+ */
 
 public class Date {
 	private int year;
@@ -27,12 +30,12 @@ public class Date {
 	 * @returns String
 	 */
 	public String toString() {
-        return (this.year + "-" + this.month + "-" + this.day + "-" + this.hour + "-" + this.minute); //todo rever isto... não convém separar sempre com o #
+        return (this.year + "-" + this.month + "-" + this.day + "-" + this.hour + "-" + this.minute);
 	}
 	
 	/**
 	 * Takes Date.toString() formated date and returns an instance with the same values.
-	 * @param String date
+     * @param date is String
 	 * @returns Date
 	 */
 	public static Date fromString(String date){

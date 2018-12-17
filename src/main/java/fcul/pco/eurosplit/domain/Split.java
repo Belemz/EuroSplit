@@ -134,10 +134,11 @@ public class Split {
 
         Split split_object = new Split(Integer.parseInt(split_string[0]), owner, split_string[2]);
 
-
-        for (String id : split_string[3].split(":")) {
-            Expense expense = Start.getExpenseCatalog().getExpenseById(Integer.parseInt(id));
-            split_object.addExpense(expense);
+        if (split_string.length > 3) {
+            for (String id : split_string[3].split(":")) {
+                Expense expense = Start.getExpenseCatalog().getExpenseById(Integer.parseInt(id));
+                split_object.addExpense(expense);
+            }
         }
 
         counter = (split_object.id > counter) ? (split_object.id) : counter;

@@ -1,4 +1,14 @@
 package fcul.pco.eurosplit.main;
+
+
+import fcul.pco.eurosplit.domain.ExpenseCatalog;
+import fcul.pco.eurosplit.domain.SplitCatalog;
+import fcul.pco.eurosplit.domain.UserCatalog;
+
+import java.io.IOException;
+import java.util.Scanner;
+
+
 /**
  * @author Cláudia Belém
  * @author Fábio Neves
@@ -10,15 +20,6 @@ package fcul.pco.eurosplit.main;
  *
  * Com os últimos testes corridos não parecem estar a haver quaisquer erros.
  */
-
-import fcul.pco.eurosplit.domain.ExpenseCatalog;
-import fcul.pco.eurosplit.domain.SplitCatalog;
-import fcul.pco.eurosplit.domain.UserCatalog;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
-
 public class Start {
 
     private static UserCatalog userCatalog;
@@ -51,9 +52,8 @@ public class Start {
 
     /**
      * Loads the catalogs stored in the paths specified in main.ApplicationConfiguration.
-     * @throws IOException
      */
-    public static void initialize() throws IOException {
+    public static void initialize() {
 
         userCatalog = UserCatalog.getInstance();
         userCatalog.load();
@@ -67,46 +67,18 @@ public class Start {
     }
 
 
-    /**
-     * Deletes the files saved as Catalogs from UserCatalog class.
-     * @throws IOException
-     */
-    private static void deleteCatalogs() throws IOException {
-        File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
-                + "/"
-                + ApplicationConfiguration.EXPENSES_CATALOG_FILENAME);
-        f.delete();
-        f.createNewFile();
-        f = new File(ApplicationConfiguration.ROOT_DIRECTORY
-                + "/"
-                + ApplicationConfiguration.USER_CATALOG_FILENAME);
-        f.delete();
-        f.createNewFile();
-        f = new File(ApplicationConfiguration.ROOT_DIRECTORY
-                + "/"
-                + ApplicationConfiguration.SPLIT_CATALOG_FILENAME);
-        f.delete();
-        f.createNewFile();
-    }
+
     
     /**
-     * Deletes the current catalogs, initializes, and starts the prompt loop.
-     * @see {@link #deleteCatalogs() #initialize()}
+     *  initializes and starts the prompt loop.
      */
     private static void run() {
-//    	try {
-//			deleteCatalogs();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-    	
+
         Scanner input = new Scanner(System.in);
-        
-        try {
-			initialize();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+
+
+        initialize();
+
         
         Interp interp = new Interp(input);
         String command = "";
@@ -115,13 +87,9 @@ public class Start {
 
         do {
             command = interp.nextToken();
-            try {
-				interp.execute(command, input);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-        } while (!command.equals("quit"));
+            interp.execute(command, input);
 
+        } while (!command.equals("quit"));
 
     }
 

@@ -72,6 +72,7 @@ public class User implements Comparable<User>{
 	 */
 	public static User fromString(String user) {
 		String[] split_user = user.split("#");
+
 		return new User(split_user[0], split_user[1]);
 	}
 	
@@ -87,7 +88,7 @@ public class User implements Comparable<User>{
 	 * Method for the implementation of type comparable.
 	 * Gets char from name o at position 0, and compares with the same position
 	 * on User instance.
-	 * @param User o
+	 * @param o is User
 	 * @return Character.compare(valueof(x), valueof(y)).
 	 */
 	@Override

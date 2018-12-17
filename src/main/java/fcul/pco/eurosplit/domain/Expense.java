@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * The Expense class represents a an expense composed of item,
  * value, and a type User instance.
+ *
  * @author Cláudia Belém
  * @author Fábio Neves
  */
@@ -23,7 +24,7 @@ public class Expense {
 
     private User paidBy;
 
-    private List<User> paidFor; //todo pode ser com a interface em vez da classe?
+    private List<User> paidFor;
 
     private Date when;
 
@@ -31,12 +32,11 @@ public class Expense {
 
     /**
      * Constructor
-     * @param id. Identifier of the expense.
-     * @param item. Expense related item.
-     * @param value. Monetary value of Expense.
-     * @param paidBy. Type User instance, assigns
+     * @param id Identifier of the expense.
+     * @param item Expense related item.
+     * @param value Monetary value of Expense.
+     * @param paidBy Type User instance, assigns
      * an individual to the expense (identified by Name, Email).
-     * @throws Exception.
      */
     private Expense(int id, String item, int value, User paidBy) {
 
@@ -119,8 +119,7 @@ public class Expense {
         expense.append(this.when.toString()).append("#");
 
         for (User user : this.paidFor) {
-            expense.append(user.getEmail()).append("§"); //todo confirmar no enunciado - O Símbolo e se podemos escrever apenas o email. sim
-            //todo remover os caracteres após o último e-mail sim
+            expense.append(user.getEmail()).append("§");
         }
 
         return expense.toString().substring(0, expense.length() - 1);
@@ -128,7 +127,7 @@ public class Expense {
 
     /**
      * Uses User.fromString(String, String) method.
-     * @param String
+     * @param expense_line is String
      * @requires input formated into "Integer#String#Integer#User"
      * @return new Expense(Int, String, String, User)
      */
@@ -143,14 +142,13 @@ public class Expense {
                 Integer.parseInt(split_expense[2]),
                 paidBy_user);
 
-        expense_object.when = Date.fromString(split_expense[4]);  //todo confirmar se posso fazer isto
+        expense_object.when = Date.fromString(split_expense[4]);
 
         for (String email : split_expense[5].split("§")) {
             User paidFor_user = Start.getUserCatalog().getUserById(email);
             expense_object.addPaidFor(paidFor_user);
         }
 
-        // we could also replace it by getId.
         counter = (expense_object.id > counter) ? (expense_object.id) : counter;
         return expense_object;
 
