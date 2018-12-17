@@ -5,7 +5,6 @@ package fcul.pco.eurosplit.domain;
  * UserCatalog stores instances of type User in a HashMap fashion.
  */
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -113,9 +112,8 @@ public class UserCatalog {
      * Uses UserCatalog.load() from persistence package.
      * Persistence Package Full Path - fcul.pco.eurosplit.persistence.
      * Loads from file "users_map.dat" with Users.fromString method reading each line one by one.
-     * @throws FileNotFoundException
      */
-    public void load() throws FileNotFoundException {
+    public void load() {
         this.users_map = fcul.pco.eurosplit.persistence.UserCatalog.load();
     }
 

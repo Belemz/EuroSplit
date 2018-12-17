@@ -49,9 +49,8 @@ public class SplitCatalog {
     /**
      * Loads the SplitCatalog stored in the specified path in fcul.pco.main.ApplicationConfiguration into the specified instance.
      * @return Map<User, List<Split>>
-     * @throws FileNotFoundException
      */
-    public static Map<User, List<Split>> load() throws FileNotFoundException {
+    public static Map<User, List<Split>> load() {
 
         Map<User, List<Split>> map_splits = new HashMap<User, List<Split>>();
 
@@ -77,6 +76,8 @@ public class SplitCatalog {
             }
 
 
+        } catch (FileNotFoundException e) {
+            System.err.println("The split catalog file was not found.");
         }
         return map_splits;
 

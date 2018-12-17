@@ -44,7 +44,6 @@ public class ExpenseCatalog {
      * @return Expense
      */
     public Expense getExpenseById(Integer id) {
-        //todo o que fazer quando não existe no dicionário um dado id ?? null (deixo assim)
         return this.expenses_map.get(id);
     }
 
@@ -71,7 +70,7 @@ public class ExpenseCatalog {
      * specified in fcul.pco.main.AplicationConfiguration.
      * @throws FileNotFoundException
      */
-    public void load() throws FileNotFoundException {
+    public void load() {
         this.expenses_map = fcul.pco.eurosplit.persistence.ExpenseCatalog.load();
     }
 }

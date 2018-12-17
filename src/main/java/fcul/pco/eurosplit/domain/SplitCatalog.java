@@ -1,6 +1,5 @@
 package fcul.pco.eurosplit.domain;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,9 +73,8 @@ public class SplitCatalog {
     
     /**
      * Loads a new instance of SplitCatalog from the default path assigned in fcul.pco.main.AplicationConfiguration.
-     * @throws FileNotFoundException
      */
-    public void load() throws FileNotFoundException {
+    public void load() {
         this.splits_map = fcul.pco.eurosplit.persistence.SplitCatalog.load();
     }
 

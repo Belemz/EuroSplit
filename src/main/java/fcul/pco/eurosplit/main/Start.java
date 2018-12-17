@@ -2,6 +2,13 @@ package fcul.pco.eurosplit.main;
 /**
  * @author Cláudia Belém
  * @author Fábio Neves
+ *
+ * Pensamos que todas as tarefas requisitadas no projecto foram devidamente cobertas.
+ * Alterações ao código do professor foram mínimas, no entanto além do método getAllUsers na classe UserCatalog
+ * onde o tipo de retorno foi mudado para ser compatível com o método Table.tableToString(ArrayList<List<String>>),
+ * quaiquer outras mudanças foram simplesmente aditivas e derivantes de erros resultantes do processo de debugging.
+ *
+ * Com os últimos testes corridos não parecem estar a haver quaisquer erros.
  */
 
 import fcul.pco.eurosplit.domain.ExpenseCatalog;
@@ -9,17 +16,9 @@ import fcul.pco.eurosplit.domain.SplitCatalog;
 import fcul.pco.eurosplit.domain.UserCatalog;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-/**
- * Penso que todas as tarefas requisitadas no projecto foram devidamente cobertas.
- * Alterações ao código do professor foram mínimas, no entanto além do método getAllUsers na classe UserCatalog
- * onde o tipo de retorno foi mudado para ser compatível com o método Table.tableToString(ArrayList<List<String>>),
- * quaiquer outras mudanças foram simplesmente aditivas e derivantes de erros resultantes do processo de debugging.
- *
- * Com os últimos testes corridos não parecem estar a haver quaisquer erros.
- */
+
 public class Start {
 
     private static UserCatalog userCatalog;
@@ -55,39 +54,15 @@ public class Start {
      * @throws IOException
      */
     public static void initialize() throws IOException {
-        userCatalog = UserCatalog.getInstance();
-        
-        try {
-            userCatalog.load();
-        } catch (FileNotFoundException e) {
-            System.err.println("The user catalog file was not found. \nCreating a new one.");
-        	File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
-                    + "/"
-                    + ApplicationConfiguration.USER_CATALOG_FILENAME);
-            f.createNewFile();
-        }
 
-        
+        userCatalog = UserCatalog.getInstance();
+        userCatalog.load();
+
         expenseCatalog = ExpenseCatalog.getInstance();
-        try {
-            expenseCatalog.load();
-        } catch (FileNotFoundException e) {
-        	System.err.println("The user expense catalog file was not found. \nCreating a new one.");
-        	File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
-                    + "/"
-                    + ApplicationConfiguration.EXPENSES_CATALOG_FILENAME);
-            f.createNewFile();
-        }
+        expenseCatalog.load();
 
         splitCatalog = SplitCatalog.getInstance();
-        try {
-            splitCatalog.load();
-        } catch (FileNotFoundException e) {
-        	System.err.println("The split catalog file was not found. \nCreating a new one.");
-        	File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
-                    + "/"
-                    + ApplicationConfiguration.SPLIT_CATALOG_FILENAME);
-            f.createNewFile();        }
+        splitCatalog.load();
 
     }
 
@@ -119,11 +94,11 @@ public class Start {
      * @see {@link #deleteCatalogs() #initialize()}
      */
     private static void run() {
-    	try {
-			deleteCatalogs();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//    	try {
+//			deleteCatalogs();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
     	
         Scanner input = new Scanner(System.in);
         
@@ -136,7 +111,7 @@ public class Start {
         Interp interp = new Interp(input);
         String command = "";
 
-        System.out.println("Type 'help' to show available commands.");
+        System.out.println("Type 'help' to show the available commands.");
 
         do {
             command = interp.nextToken();

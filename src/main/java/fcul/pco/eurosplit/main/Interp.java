@@ -1,10 +1,7 @@
 package fcul.pco.eurosplit.main;
 
-import fcul.pco.eurosplit.domain.Expense;
-import fcul.pco.eurosplit.domain.Split;
-import fcul.pco.eurosplit.domain.SplitCatalog;
-import fcul.pco.eurosplit.domain.Table;
-import fcul.pco.eurosplit.domain.User;
+import fcul.pco.eurosplit.domain.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +11,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
- * @author tl
+ * @author Cláudia Belém
+ * @author Fábio Neves
  */
 public class Interp extends Start {
 
@@ -124,8 +122,8 @@ public class Interp extends Start {
 
     /**
      * Command to introduce a new user.
-     * @param Scanner
-     * @param String
+     * @param input
+     * @param nName
      * @Overload
      */
     private void makeNewUser(Scanner input, String nName) {
@@ -166,33 +164,40 @@ public class Interp extends Start {
      * Current user is replaced on a successfull login.
      * Not sentitive to case for either email or name. 
      * Additional methods were created in UserCatalog to get matching names.
-     * @param Scanner
+     * @param input
      */
     private void login(Scanner input) {
+        User selectedUser;
+        Boolean isLoggedIn;
+
         System.out.print("Username: ");
         String username = input.nextLine();
-        User selUser;
-        Boolean notLoggedIn;
+
         //verifies if user exists in Start.userCatalog
-        selUser = this.selectOrCreateUser(input, username);
-        
-        try {
-        	notLoggedIn = !selUser.getName().equals(this.currentUser.getName());
-        	} catch (NullPointerException e) {
-        		notLoggedIn = true;
-        		}
-        
-        if(notLoggedIn) {
-        	//to avoid asking again for email when failed login name
-        	System.out.print("Email: ");
-            String email = input.nextLine();
-            //verifies if email corresponds to user in Start.userCatalog
-            if(Start.getUserCatalog().hasUserWithId(email)) {
-            	this.currentUser = Start.getUserCatalog().getUserById(email);
-            } else {
-            	System.out.println("Email doesn't match.");
-            	return;
-            };
+        selectedUser = this.selectOrCreateUser(input, username);
+
+        if (selectedUser != null) {
+            try {
+                isLoggedIn = selectedUser.getName().equals(this.currentUser.getName());
+            } catch (NullPointerException exception) {
+                isLoggedIn = false;
+            }
+
+            if (!isLoggedIn) {
+                // to avoid asking again for email when failed login name
+                System.out.print("Email: ");
+                String email = input.nextLine();
+                // verifies if email corresponds to user in Start.userCatalog
+
+                if (selectedUser.getEmail().equals(email)) {
+//
+//                if (Start.getUserCatalog().hasUserWithId(email)) {
+                    this.currentUser = Start.getUserCatalog().getUserById(email);
+                } else {
+                    System.out.println("Email doesn't match.");
+                }
+            }
+
         }
         
         
@@ -460,9 +465,7 @@ public class Interp extends Start {
                 setPrompt();
                 return newUser;
             } else {
-                // ask again:
-                System.out.println("pff... Who did you pay for: ");
-                return selectOrCreateUser(input, input.nextLine());
+                return null;
             }
         } else if (list.size() == 1) {
             return list.get(0);
@@ -479,7 +482,7 @@ public class Interp extends Start {
             	error = false;
 	            try {
 	            	i = Integer.valueOf(input.nextLine());
-	            	//de forma a apanhar a excep��o.
+                    //de forma a apanhar a excepção.
 	            	list.get(i);
 	            } catch (IndexOutOfBoundsException e1) {
 	            	System.err.println("Use an int within choice range...");

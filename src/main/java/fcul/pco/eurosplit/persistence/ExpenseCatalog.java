@@ -34,9 +34,8 @@ public class ExpenseCatalog {
     /**
      * Loads the ExpenseCatalog stored in the specified path in fcul.pco.main.ApplicationConfiguration into the specified instance.
      * @return Map<Integer, Expense>
-     * @throws FileNotFoundException
      */
-    public static Map<Integer, Expense> load() throws FileNotFoundException {
+    public static Map<Integer, Expense> load() {
 
         Map<Integer, Expense> map_expenses = new HashMap<Integer, Expense>();
 
@@ -48,6 +47,8 @@ public class ExpenseCatalog {
                 Expense expense = Expense.fromString(line);
                 map_expenses.put(expense.getId(), expense);
             }
+        } catch (FileNotFoundException e) {
+            System.err.println("The expense catalog file was not found.");
         }
         return map_expenses;
 

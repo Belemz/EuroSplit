@@ -39,9 +39,8 @@ public class UserCatalog {
     /**
      * Loads the UserCatalog stored in the specified path in fcul.pco.main.ApplicationConfiguration into the specified instance.
      * @return Map<String, User>
-     * @throws FileNotFoundException
      */
-    public static Map<String, User> load() throws FileNotFoundException {
+    public static Map<String, User> load() {
         Map<String, User> map_users = new HashMap<String, User>();
 
         try (Scanner inputFromFile = new Scanner(new BufferedReader(new FileReader(ROOT_DIRECTORY + USER_CATALOG_FILENAME)))) {
@@ -51,6 +50,8 @@ public class UserCatalog {
                 User user = User.fromString(line);
                 map_users.put(user.getEmail(), user);
             }
+        } catch (FileNotFoundException e) {
+            System.err.println("The user catalog file was not found.");
         }
         return map_users;
 

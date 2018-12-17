@@ -9,6 +9,7 @@ import fcul.pco.eurosplit.main.Start;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * The Split class encloses events, to which a list of
  * Expenses are connected to. It's identified by id, owner, and event.
@@ -38,17 +39,17 @@ public class Split {
         this.event = event;
         this.expenses = new ArrayList<>();
     }
-    
+
     /**
      * Public constructr, user to declare the owner and event in the split instance.
      * @param owner  the user who creates the split.
-     * @param event  the event associated with the split.
+     * @param events  the event associated with the split.
      */
     public Split(User owner, String events) {
         this(++counter, owner, events);
 
     }
-    
+
     /**
      * Sets the event in the split instance.
      * @param event
@@ -80,7 +81,7 @@ public class Split {
     public List<Expense> getExpenses() {
     	return this.expenses;
     }
-    
+
     /**
      * Adds an expense to the List of expenses in the split instance.
      * @param e  the expense to be added.
@@ -99,7 +100,7 @@ public class Split {
 
     /**
      * Prepares the contents in the split instance to be transformed into a single string.
-     * It's attributes are sepparated by hash (#) sign, and the expense list contents 
+     * It's attributes are sepparated by hash (#) sign, and the expense list contents
      * sepparated by ":";
      * @return String formated in "id#owner#event#expense:expense:...".
      */
@@ -118,13 +119,14 @@ public class Split {
     }
 
     /**
-     * Transduces the contents of a string formated in the same fashion has the one 
+     * Transduces the contents of a string formated in the same fashion has the one
      * delivered by Split.toString();
      * @see {@link #toString()}
      * @param  split	String formated in "id#owner#event#expense:expense:...".
      * @return Split instance.
      */
     public static Split fromString(String split) {
+
         String[] split_string = split.split("#");
 
         User owner = Start.getUserCatalog().getUserById(split_string[1]);
