@@ -1,6 +1,7 @@
 package fcul.pco.eurosplit.persistence;
 
 /**
+ * This class ensures proper loading and saving of SplitCatalog instances.
  * @author Cláudia Belém
  * @author Fábio Neves
  */
@@ -17,7 +18,12 @@ import static fcul.pco.eurosplit.main.ApplicationConfiguration.SPLIT_CATALOG_FIL
 
 
 public class SplitCatalog {
-
+	
+	/**
+	 * Saves the SplitCatalog instance to the specified path in fcul.pco.main.ApplicationConfiguration.
+	 * @param splits
+	 * @throws IOException
+	 */
     public static void save(Map<User, List<Split>> splits) throws IOException {
 
         try (BufferedWriter file_write = new BufferedWriter(new FileWriter(ROOT_DIRECTORY + SPLIT_CATALOG_FILENAME))) {
@@ -39,7 +45,12 @@ public class SplitCatalog {
 
         }
     }
-
+    
+    /**
+     * Loads the SplitCatalog stored in the specified path in fcul.pco.main.ApplicationConfiguration into the specified instance.
+     * @return Map<User, List<Split>>
+     * @throws FileNotFoundException
+     */
     public static Map<User, List<Split>> load() throws FileNotFoundException {
 
         Map<User, List<Split>> map_splits = new HashMap<User, List<Split>>();

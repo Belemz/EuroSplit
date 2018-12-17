@@ -4,7 +4,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * The ExpenseCatalog class gives the tools to create, store, and manage
+ * general lists of expenses created in runtime.
+ * @author Cláudia Belém 
+ * @author Fábio Neves
+ */
 public class ExpenseCatalog {
 
     private Map<Integer, Expense> expenses_map;
@@ -25,7 +30,7 @@ public class ExpenseCatalog {
     }
 
 
-    /*
+    /**
      * Stores expense instance to ExpenseCatalog.
      * @param exp
      */
@@ -33,7 +38,7 @@ public class ExpenseCatalog {
         this.expenses_map.put(exp.getId(), exp);
     }
 
-    /*
+    /**
      * Returns Expense instance from ExpenseCatalog according to key.
      * @param id
      * @return Expense
@@ -43,7 +48,7 @@ public class ExpenseCatalog {
         return this.expenses_map.get(id);
     }
 
-    /*
+    /**
      * Searches for an Expense within ExpenseCatalog for it's id.
      * @returns boolean
      */
@@ -51,11 +56,21 @@ public class ExpenseCatalog {
         return this.expenses_map.containsKey(id);
     }
 
-
+    /**
+     * Saves the current instance of ExpenseCatalog in the default path
+     * specified in fcul.pco.main.AplicationConfiguration.
+     * @throws IOException
+     * @warning Existing files in the specified path will be overwritten.
+     */
     public void save() throws IOException {
         fcul.pco.eurosplit.persistence.ExpenseCatalog.save(this.expenses_map);
     }
-
+    
+    /**
+     * Loads a saved ExpenseCatalog to the current instance in the default path
+     * specified in fcul.pco.main.AplicationConfiguration.
+     * @throws FileNotFoundException
+     */
     public void load() throws FileNotFoundException {
         this.expenses_map = fcul.pco.eurosplit.persistence.ExpenseCatalog.load();
     }

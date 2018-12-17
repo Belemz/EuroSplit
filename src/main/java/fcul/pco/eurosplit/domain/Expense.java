@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/*
- * The Expense class represents a an expense composed of item
- * , value, and a type User instance.
- * @author Cláudia Belém & Fábio Neves
+/**
+ * The Expense class represents a an expense composed of item,
+ * value, and a type User instance.
+ * @author Cláudia Belém
+ * @author Fábio Neves
  */
 
 public class Expense {
@@ -28,7 +29,7 @@ public class Expense {
 
     private static int counter = 0;
 
-    /*
+    /**
      * Constructor
      * @param id. Identifier of the expense.
      * @param item. Expense related item.
@@ -38,10 +39,6 @@ public class Expense {
      * @throws Exception.
      */
     private Expense(int id, String item, int value, User paidBy) {
-        /*if (value <= 0) {
-            //Doesn't allow negative value Expense instance to be created.
-            throw new Exception("Positive Expense value needed.");  todo mudar o throw: criar new subclass of Exception
-        }*/
 
         this.id = id;
         this.item = item;
@@ -64,76 +61,51 @@ public class Expense {
         return this.id;
     }
 
-    /*
+    /**
      * Returns Item of the expense instance.
-     * @returns String
+     * @return String item
      */
     public String getItem() {
         return this.item;
     }
 
-    /*
-     * Substitutes the name of the item.
-     *@param item
-     */
-//    public void setItem(String item) {
-//        this.item = item;
-//    } //todo isto é necessário?
 
-
-    /*
-     * Sets value. If already set, overwrites.
-     * @param value
-     */
-   /* public void setValue(int value) {  todo isto é necessário ?
-        if (value <= 0) {
-            throw new Exception("Positive Expense value needed.");
-            //Doesn't allow negative value Expense instance to be created.
-        }
-
-        this.value = value;
-    } */
-
-    /*
+    /**
      * Returns the value of the expense instance.
-     * @returns int
+     * @return int value
      */
     public int getValue() {
         return this.value;
     }
 
 
-    /*
+    /**
      * Returns the paying User of expense instance.
-     * @returns User
+     * @return User paidBy
      */
     public User getUser() {
         return this.paidBy;
     }
 
-    /*
+    /**
      * Returns the list of paidFor Users
-     * @ return paidFor
+     * @return List<User> paidFor
      */
     public List<User> getPaidFor(){
     	return this.paidFor;
     }
-    /*
-     * Sets User instance. If already present, overwrites previous value.
-     * @param paidBy
-     * @requires User instance.
+    
+    /**
+     * Adds a paying user to the paidFor list in the instance.
+     * @param user
      */
-    public void setUser(String name, String email) {
-        this.paidBy = new User(name, email);
-    } // todo isto é necessário?
-
     public void addPaidFor(User user) {
         this.paidFor.add(user);
     }
 
-    /*
+    /**
      * Transforms Expense attributes into its hashkey string with format item#value#paidBy.
-     * @returns String
+     * @return String
      */
     public String toString() {
 
@@ -154,11 +126,11 @@ public class Expense {
         return expense.toString().substring(0, expense.length() - 1);
     }
 
-    /*
+    /**
      * Uses User.fromString(String, String) method.
      * @param String
      * @requires input formated into "Integer#String#Integer#User"
-     * @returns new Expense(Int, String, String, User)
+     * @return new Expense(Int, String, String, User)
      */
     public static Expense fromString(String expense_line) throws NumberFormatException {
 

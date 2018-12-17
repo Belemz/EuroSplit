@@ -5,17 +5,12 @@ import fcul.pco.eurosplit.domain.Split;
 import fcul.pco.eurosplit.domain.SplitCatalog;
 import fcul.pco.eurosplit.domain.Table;
 import fcul.pco.eurosplit.domain.User;
-import fcul.pco.eurosplit.domain.UserCatalog;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.IntStream;
 
 /**
  *
@@ -57,7 +52,6 @@ public class Interp extends Start {
      * @param input
      * @throws IOException 
      */
-    // TODO: Tem de se corrigir e testar "makeNewExpense" "printBalance" e "makeNewExpense"
     public void execute(String command, Scanner input) throws IOException {
         switch (command) {
             case "help":
@@ -105,6 +99,10 @@ public class Interp extends Start {
         System.out.println("reset: deletes current catalogs");
     }
     
+    /**
+     * Command to introduce a new user.
+     * @param input
+     */
     private void makeNewUser(Scanner input) {
        System.out.print("User name: ");
        String nName = input.nextLine();
@@ -123,7 +121,12 @@ public class Interp extends Start {
        
     }
 
-    // @overload
+    /**
+     * Command to introduce a new user.
+     * @param Scanner
+     * @param String
+     * @Overload
+     */
     private void makeNewUser(Scanner input, String nName) {
         System.out.print("Email address: ");
         String nEmail = input.nextLine();
@@ -140,7 +143,8 @@ public class Interp extends Start {
         }
 
     };
-    /*
+    
+    /**
      * Calls Start.getAllUsers from within Start class in order 
      * to print Start.userCatalog instance users in table form.
      */
@@ -148,16 +152,20 @@ public class Interp extends Start {
         System.out.println(Start.getUserCatalog().getAllUsers());
     }
     
+    /**
+     * Saves the current session catalogs and exits the loop.
+     * @see {@link #save()}
+     */
     private void quit() {
         save();
     }
 
     
-    /*
+    /**
      * Current user is replaced on a successfull login.
      * Not sentitive to case for either email or name. 
      * Additional methods were created in UserCatalog to get matching names.
-     * @param input 
+     * @param Scanner
      */
     private void login(Scanner input) {
         System.out.print("Username: ");
@@ -190,14 +198,11 @@ public class Interp extends Start {
         this.setPrompt();
     }    
     
-    /*
+    /**
      * Replaces this.currentSplit with nSplit, with logged in user as owner and event set by request.
      * Replaces singleton SplitCatalog instance with this.currentSplit.
      * @param input 
-     * @return this.currentSplit = nSplit;
      */
-    
-    
 	private void makeNewSplit(Scanner input) {
 		if(secure_procedure(0)) return;
 		
@@ -211,7 +216,10 @@ public class Interp extends Start {
 		
 	}
     
-    
+    /**
+     * Selects and assigns created split to currentSplit attribute.
+     * @param input
+     */
     private void selectSplit(Scanner input) {
     	if(this.secure_procedure(0)) return;
 		
@@ -232,7 +240,10 @@ public class Interp extends Start {
 		this.currentSplit = allSplits.get(Integer.parseInt(input.nextLine()));
 		this.setPrompt();
     }
-
+    
+    /**
+     * Prints the balance of every user participating in a split.
+     */
     private void printBalance() {
     	if(this.secure_procedure(1)) return;
         
@@ -241,8 +252,6 @@ public class Interp extends Start {
     	int debitAmmountRemainder;
     	int userBalanceUpdate;
     	
-    	// TODO: Ainda tem de ser adicionar um método aleatório 
-    	// para dividir o resto por pessoas.
     	HashMap<User, Integer> userBalance = new HashMap<>();
     	for(Expense nextExp : this.currentSplit.getExpenses()) {
     		//this adds the creator of the expense.
@@ -305,6 +314,9 @@ public class Interp extends Start {
         }
     }
 
+    /**
+     * Saves the catalogs of the current session.
+     */
     private void save() {
         try {
         	System.out.println("Saving User Catalog...");
@@ -326,12 +338,11 @@ public class Interp extends Start {
         }
     }
     
-    /*
+    /**
      * Creates a new Expense instance with the proper parameters.
      * Adds the Expense to Interp.currentSplit, and Start.expenseCatalog.
+     * @param input
      */
-    
-    
     private void makeNewExpense(Scanner input) {
         if(this.secure_procedure(1)) return;       
     	
@@ -364,14 +375,19 @@ public class Interp extends Start {
         this.currentSplit.addExpense(nExpense);
         
         Start.getExpenseCatalog().addExpense(nExpense);
-        // TODO
     }
-
+    
+    /**
+     * Retrieves a new command.
+     * @return
+     */
     public String getPrompt() {
         return prompt;
     }
     
-    
+    /**
+     * Sets a new command.
+     */
     public void setPrompt() {
         if (currentUser == null) {
             this.prompt = ApplicationConfiguration.DEFAULT_PROMPT;
@@ -384,7 +400,10 @@ public class Interp extends Start {
             this.prompt = currentUser.getName() + "." + currentSplit.getEvent();
         }
     }
-
+    /**
+     * 
+     * @return
+     */
     String nextToken() {
         String in;
         System.out.print(prompt + "> ");
@@ -408,18 +427,14 @@ public class Interp extends Start {
      *
      * @param input
      * @param name
-     * @return
+     * @return User
      */
-    
-    
     private User selectOrCreateUser(Scanner input, String name) {
         ArrayList<User> list = Start.getUserCatalog().getUsersWithName(name);
-        //TODO: a little addition to handle inputmismatchexception
         Boolean error = false;
         if (list.isEmpty()) {
             System.out.println("There is no registred user with name " + name + ".");
             if (askYNQuestion(input, "Do you want to create user " + name)) {
-                //TODO: commented lines bellow necessary?
             	//User theUser = currentUser;
                 makeNewUser(input, name);
                 User newUser = currentUser;
@@ -460,7 +475,13 @@ public class Interp extends Start {
             return list.get(i);
         }
     }
-
+    
+    /**
+     * Selects a user from the current session UserCatalog
+     * @param input
+     * @param name
+     * @return User
+     */
     private User selectUser(Scanner input, String name) {
     	List<User> list = Start.getUserCatalog().getUsersWithName(name);
     	if (list.size() == 1) return list.get(0);
@@ -481,6 +502,12 @@ public class Interp extends Start {
     	return list.get(k);
     }
     
+    /**
+     * 
+     * @param input
+     * @param question
+     * @return
+     */
     private boolean askYNQuestion(Scanner input, String question) {
         System.out.print(question + "? (y/n):");
         String answer = input.nextLine();
@@ -492,9 +519,9 @@ public class Interp extends Start {
         return answer.equalsIgnoreCase("Y");
     }
     
-    /*
+    /**
      * Use for assuring session has valid instances of either user or split.
-     * @ param gate //gate = 0 for verifying user login, or gate = 1 for user and split selection.
+     * @param gate //gate = 0 for verifying user login, or gate = 1 for user and split selection.
      */
     private boolean secure_procedure(int gate) {
     	if (gate == 1) {

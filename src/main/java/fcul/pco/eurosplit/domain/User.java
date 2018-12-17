@@ -1,9 +1,10 @@
 package fcul.pco.eurosplit.domain;
 
 
-/*
+/**
  * The User class represents a user assigned with name and email.
- * @author Cláudia Belém & Fábio Neves	
+ * @author Cláudia Belém
+ * @author Fábio Neves	
  */
 
 public class User implements Comparable<User>{
@@ -11,7 +12,7 @@ public class User implements Comparable<User>{
 	
 	private String email;
 	
-	/*
+	/**
 	 * Constructor of Instance User.
 	 * @param name
 	 * @param email
@@ -21,15 +22,15 @@ public class User implements Comparable<User>{
 		this.email = email;
 	}
 	
-	/*
+	/**
 	 * Sets instance name. If already present, overwrites.
-	 *@param name
+	 * @param name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	
-	/*
+	/**
 	 * Returns name of User associated instance.
 	 * @returns String
 	 */
@@ -37,7 +38,7 @@ public class User implements Comparable<User>{
 		return name;
 	}
 	
-	/*
+	/**
 	 * Sets instance email. If already present, overwrites.
 	 *@param email
 	 */
@@ -45,18 +46,17 @@ public class User implements Comparable<User>{
 		this.email = email;
 	}
 	
-	/*
-	 *
+	/**
 	 * Returns email of User associated instance.
-	 * @returns String
+	 * @return String email.
 	 */
 	public String getEmail() {
 		return email;
 	}
 	
-	/*
+	/**
 	 * Returns hashkey separated user attributes in format name#email.
-	 * @returns User.toString();
+	 * @return String user.toString().
 	 */
 	public String toString() {
 		StringBuilder user = new StringBuilder();
@@ -65,31 +65,33 @@ public class User implements Comparable<User>{
 	}
 	
 	
-	/*
+	/**
 	 * Creates an User instance from string. Splits string on hashkey.
-	 * @returns User
+	 * @return User(user.toString)
+	 * @see {@link #toString()}
 	 */
 	public static User fromString(String user) {
 		String[] split_user = user.split("#");
 		return new User(split_user[0], split_user[1]);
 	}
 	
-	/*
+	/**
 	 * Creates an User instance from two different strings.
-	 * @returns User
+	 * @return User (name#email)
 	 */
 	public static User fromString(String name, String email) {
 		return new User(name, email);
 	}
 	
-	/*
+	/**
 	 * Method for the implementation of type comparable.
 	 * Gets char from name o at position 0, and compares with the same position
-	 * on User istance.
+	 * on User instance.
+	 * @param User o
+	 * @return Character.compare(valueof(x), valueof(y)).
 	 */
 	@Override
 	public int compareTo(User o) {
-		// TODO Auto-generated method stub
 		return Character.compare(this.name.charAt(0), o.name.charAt(0));
 	}
 }

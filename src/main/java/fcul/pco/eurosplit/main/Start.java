@@ -1,6 +1,7 @@
 package fcul.pco.eurosplit.main;
-/*
- * @author Cláudia Belém & Fábio Neves
+/**
+ * @author Cláudia Belém
+ * @author Fábio Neves
  */
 
 import fcul.pco.eurosplit.domain.ExpenseCatalog;
@@ -17,19 +18,35 @@ public class Start {
     private static UserCatalog userCatalog;
     private static ExpenseCatalog expenseCatalog;
     private static SplitCatalog splitCatalog;
-
+    
+    /**
+     * Retrieves the current UserCatalog.
+     * @return UserCatalog
+     */
     public static UserCatalog getUserCatalog() {
         return userCatalog;
     }
-
+    
+    /**
+     * Retrieves the current ExpenseCatalog.
+     * @return ExpenseCatalog
+     */
     public static ExpenseCatalog getExpenseCatalog() {
         return expenseCatalog;
     }
 
+    /**
+     * Retrieves the current SplitCatalog.
+     * @return SplitCatalog
+     */
     public static SplitCatalog getSplitCatalog() {
         return splitCatalog;
     }
 
+    /**
+     * Loads the catalogs stored in the paths specified in main.ApplicationConfiguration.
+     * @throws IOException
+     */
     public static void initialize() throws IOException {
         userCatalog = UserCatalog.getInstance();
         
@@ -68,8 +85,9 @@ public class Start {
     }
 
 
-    /*
+    /**
      * Deletes the files saved as Catalogs from UserCatalog class.
+     * @throws IOException
      */
     private static void deleteCatalogs() throws IOException {
         File f = new File(ApplicationConfiguration.ROOT_DIRECTORY
@@ -89,10 +107,10 @@ public class Start {
         f.createNewFile();
     }
     
-    
-
-    // o run não pode ter throws. faz catch dentro do método (à volta do delete) ou dentro do próprio método delete!
-    // Não faz sentido fazer throws no main! Isso dá uma exceção sem dar erro. Ou faz catch no main ou antes.
+    /**
+     * Deletes the current catalogs, initializes, and starts the prompt loop.
+     * @see {@link #deleteCatalogs() #initialize()}
+     */
     private static void run() {
     	try {
 			deleteCatalogs();
@@ -105,7 +123,6 @@ public class Start {
         try {
 			initialize();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
         

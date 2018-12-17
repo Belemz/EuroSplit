@@ -9,9 +9,18 @@ import java.util.Scanner;
 
 import static fcul.pco.eurosplit.main.ApplicationConfiguration.EXPENSES_CATALOG_FILENAME;
 import static fcul.pco.eurosplit.main.ApplicationConfiguration.ROOT_DIRECTORY;
-
+/**
+ * This class ensures the proper management of saving and loading operations.
+ * @author Fábio Neves
+ * @author Cláudia Belém
+ */
 public class ExpenseCatalog {
-
+	
+	/**
+	 * Saves the ExpenseCatalog instance to the specified path in fcul.pco.main.ApplicationConfiguration.
+	 * @param expenses
+	 * @throws IOException
+	 */
     public static void save(Map<Integer, Expense> expenses) throws IOException {
 
         try (BufferedWriter file_write = new BufferedWriter(new FileWriter(ROOT_DIRECTORY + EXPENSES_CATALOG_FILENAME))) {
@@ -22,7 +31,11 @@ public class ExpenseCatalog {
         }
     }
 
-
+    /**
+     * Loads the ExpenseCatalog stored in the specified path in fcul.pco.main.ApplicationConfiguration into the specified instance.
+     * @return Map<Integer, Expense>
+     * @throws FileNotFoundException
+     */
     public static Map<Integer, Expense> load() throws FileNotFoundException {
 
         Map<Integer, Expense> map_expenses = new HashMap<Integer, Expense>();

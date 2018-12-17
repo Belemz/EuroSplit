@@ -1,8 +1,9 @@
 package fcul.pco.eurosplit.domain;
-/*
- * @author F�bio Neves
- * This class defines Date instances.
- */
+ /** @author Fábio Neves 
+  *  @author Cláudia Belém
+  * This class defines Date instances.
+  */
+ 
 
 import java.time.LocalDateTime;
 
@@ -21,18 +22,18 @@ public class Date {
 		this.minute = minute;
 	}
 	
-	/*
+	/**
 	 * Comprises the instance attributes separated by hash key with format y#m#d#h#m.
-	 * @returns String.
+	 * @returns String
 	 */
 	public String toString() {
         return (this.year + "-" + this.month + "-" + this.day + "-" + this.hour + "-" + this.minute); //todo rever isto... não convém separar sempre com o #
 	}
 	
-	/*
+	/**
 	 * Takes Date.toString() formated date and returns an instance with the same values.
-	 * @param String.
-	 * @returns Date. 
+	 * @param String date
+	 * @returns Date
 	 */
 	public static Date fromString(String date){
         String[] split_date = date.split("-");
@@ -46,7 +47,9 @@ public class Date {
 		return new Date(year, month, day, hour, minute);
 	}
 
-    /*todo contract
+    /**
+     * Date at the time of the call.
+     * @returns Date(Year, Month, Day of Month, Hour, Minute)
 	 */
     public static Date dateNow() {
 
