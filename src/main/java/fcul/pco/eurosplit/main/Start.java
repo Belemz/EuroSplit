@@ -12,7 +12,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-
+/**
+ * Penso que todas as tarefas requisitadas no projecto foram devidamente cobertas.
+ * Alterações ao código do professor foram mínimas, no entanto além do método getAllUsers na classe UserCatalog
+ * onde o tipo de retorno foi mudado para ser compatível com o método Table.tableToString(ArrayList<List<String>>),
+ * quaiquer outras mudanças foram simplesmente aditivas e derivantes de erros resultantes do processo de debugging.
+ * 
+ * Existe ainda um pequeno problema que não conseguimos corrigir.
+ * Quando é pedido um novo utilizador, chama-se o método SelectOrCreateUser que retorna uma variável tipo User.
+ * Se entrar no loop deste método que afirma não ter sido encontrado um utilizador
+ * 
+ *
+ */
 public class Start {
 
     private static UserCatalog userCatalog;

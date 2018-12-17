@@ -52,6 +52,7 @@ public class Interp extends Start {
      * @param input
      * @throws IOException 
      */
+    // TODO: Tem de se corrigir e testar "makeNewExpense" "printBalance" e "makeNewExpense"
     public void execute(String command, Scanner input) throws IOException {
         switch (command) {
             case "help":
@@ -252,6 +253,8 @@ public class Interp extends Start {
     	int debitAmmountRemainder;
     	int userBalanceUpdate;
     	
+    	// TODO: Ainda tem de ser adicionar um método aleatório 
+    	// para dividir o resto por pessoas.
     	HashMap<User, Integer> userBalance = new HashMap<>();
     	for(Expense nextExp : this.currentSplit.getExpenses()) {
     		//this adds the creator of the expense.
@@ -290,7 +293,6 @@ public class Interp extends Start {
     		
     		//agora adiciona-se o user pago (se não tiver aparecido antes) 
     		//e incrementa-se o devido valor.
-    		System.out.println(userBalance.get(nextExp.getUser()));
     		userBalanceUpdate = (nextExp.getValue()) + userBalance.get(nextExp.getUser());
     		userBalance.replace(nextExp.getUser(), userBalanceUpdate);
         }
@@ -350,11 +352,17 @@ public class Interp extends Start {
         String theItem = input.nextLine();
         
         System.out.print("How much did you pay? ");
-        
-        int theValue = Integer.parseInt(input.nextLine());
+        int theValue = 0;
+        while(!input.hasNextInt()) {
+        	System.err.print("Expense value must be an integer.\nTry again.");
+        	input.next();
+        };
+        theValue = input.nextInt();
         
         Expense nExpense = new Expense(theItem, theValue, currentUser);
     	
+        input.nextLine(); //there was an issue were input was not flushed.
+        
         String paidFor;
         User whichUser;
         //breaks out of loop when no one is prompted
@@ -369,12 +377,20 @@ public class Interp extends Start {
 				} else break;
 			}
 
-	        whichUser = this.selectUser(input, paidFor);
-	        nExpense.addPaidFor(whichUser);
+			whichUser = this.selectUser(input, paidFor);
+			if(whichUser == null) {
+				if(nExpense.getPaidFor().size() == 0){
+					System.out.println("Add at least one participating user for the Expense.");
+					continue;
+				} else break;
+			}
+	        
+			nExpense.addPaidFor(whichUser);
         }
         this.currentSplit.addExpense(nExpense);
         
         Start.getExpenseCatalog().addExpense(nExpense);
+        // TODO
     }
     
     /**
@@ -431,10 +447,12 @@ public class Interp extends Start {
      */
     private User selectOrCreateUser(Scanner input, String name) {
         ArrayList<User> list = Start.getUserCatalog().getUsersWithName(name);
+        //TODO: a little addition to handle inputmismatchexception
         Boolean error = false;
         if (list.isEmpty()) {
             System.out.println("There is no registred user with name " + name + ".");
             if (askYNQuestion(input, "Do you want to create user " + name)) {
+                //TODO: commented lines bellow necessary?
             	//User theUser = currentUser;
                 makeNewUser(input, name);
                 User newUser = currentUser;
@@ -483,6 +501,8 @@ public class Interp extends Start {
      * @return User
      */
     private User selectUser(Scanner input, String name) {
+    	if(name.equalsIgnoreCase("no one")) return null;
+    			
     	List<User> list = Start.getUserCatalog().getUsersWithName(name);
     	if (list.size() == 1) return list.get(0);
     	
@@ -495,7 +515,7 @@ public class Interp extends Start {
 	    	k = Integer.parseInt(input.nextLine());
     	} else {
 	    	System.out.println("User not found.");
-	    	System.out.print("Name: ");
+	    	System.out.print("Name: («no one» to terminate)");
 	    	name = input.nextLine();
 	    	return selectUser(input, name);
     	}
